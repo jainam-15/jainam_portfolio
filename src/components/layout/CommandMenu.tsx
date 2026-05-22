@@ -29,8 +29,13 @@ export default function CommandMenu() {
         setIsOpen(false);
       }
     };
+    const handleToggle = () => setIsOpen((open) => !open);
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("toggle-command-menu", handleToggle);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("toggle-command-menu", handleToggle);
+    };
   }, []);
 
   // Filter actions based on search

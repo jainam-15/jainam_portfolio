@@ -5,22 +5,6 @@ import { motion, useInView } from "framer-motion";
 import { socialLinks, siteConfig } from "@/lib/constants";
 
 // Custom SVG Icons to avoid import issues or library dependencies
-function ArrowRightIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <line x1="5" y1="12" x2="19" y2="12" />
-      <polyline points="12 5 19 12 12 19" />
-    </svg>
-  );
-}
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -74,21 +58,16 @@ export default function ContactSection() {
     <section
       id="contact"
       ref={containerRef}
-      className="relative w-full overflow-hidden bg-background border-t border-border py-32 md:py-48 select-none"
+      className="relative w-full overflow-hidden bg-black py-32 md:py-48 select-none"
     >
-      {/* Delicate background ambient pulse */}
-      <div className="pointer-events-none absolute left-1/2 bottom-0 -translate-x-1/2 -z-10 h-[600px] w-[800px] opacity-[0.02] blur-[150px]">
-        <div className="h-full w-full rounded-full bg-gradient-to-t from-blue-500 to-transparent" />
-      </div>
-
       <div className="mx-auto max-w-4xl px-6">
         
         {/* Section Header */}
-        <div className="mb-20 text-center">
-          <span className="text-[10px] tracking-[0.25em] text-muted-foreground/40 font-bold uppercase block mb-3">
+        <div className="mb-24 text-left">
+          <span className="text-[10px] tracking-[0.25em] text-zinc-600 font-bold uppercase block mb-3">
             Connection
           </span>
-          <h2 className="text-[clamp(2.5rem,6vw,4.5rem)] font-extrabold tracking-[-0.05em] leading-[0.9] text-foreground uppercase">
+          <h2 className="text-[clamp(3rem,8vw,6.5rem)] font-black tracking-[-0.05em] leading-[0.9] text-white uppercase">
             Start Dialogue.
           </h2>
         </div>
@@ -98,13 +77,13 @@ export default function ContactSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mx-auto max-w-2xl"
+          className="mx-auto max-w-3xl"
         >
-          <form onSubmit={handleSubmit} className="space-y-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <form onSubmit={handleSubmit} className="space-y-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Name Field */}
-              <div className="flex flex-col gap-2 text-left">
-                <label htmlFor="contact-name" className="text-[10px] font-mono tracking-[0.2em] text-muted-foreground/40 uppercase">
+              <div className="flex flex-col gap-3 text-left">
+                <label htmlFor="contact-name" className="text-[10px] font-mono tracking-[0.25em] text-zinc-500 uppercase">
                   Name / Entity
                 </label>
                 <input
@@ -114,13 +93,13 @@ export default function ContactSection() {
                   placeholder="Identify yourself..."
                   value={formState.name}
                   onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                  className="w-full bg-transparent border-b border-white/[0.08] focus:border-white py-3 text-sm text-foreground placeholder:text-muted-foreground/20 outline-none transition-all duration-300 rounded-none font-sans"
+                  className="w-full bg-transparent border-b border-zinc-800 focus:border-white py-4 text-base md:text-lg text-white placeholder:text-zinc-700 outline-none transition-all duration-500 rounded-none font-sans"
                 />
               </div>
 
               {/* Email Field */}
-              <div className="flex flex-col gap-2 text-left">
-                <label htmlFor="contact-email" className="text-[10px] font-mono tracking-[0.2em] text-muted-foreground/40 uppercase">
+              <div className="flex flex-col gap-3 text-left">
+                <label htmlFor="contact-email" className="text-[10px] font-mono tracking-[0.25em] text-zinc-500 uppercase">
                   Return Path / Email
                 </label>
                 <input
@@ -130,14 +109,14 @@ export default function ContactSection() {
                   placeholder="name@domain.com"
                   value={formState.email}
                   onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                  className="w-full bg-transparent border-b border-white/[0.08] focus:border-white py-3 text-sm text-foreground placeholder:text-muted-foreground/20 outline-none transition-all duration-300 rounded-none font-sans"
+                  className="w-full bg-transparent border-b border-zinc-800 focus:border-white py-4 text-base md:text-lg text-white placeholder:text-zinc-700 outline-none transition-all duration-500 rounded-none font-sans"
                 />
               </div>
             </div>
 
             {/* Message Field */}
-            <div className="flex flex-col gap-2 text-left">
-              <label htmlFor="contact-message" className="text-[10px] font-mono tracking-[0.2em] text-muted-foreground/40 uppercase">
+            <div className="flex flex-col gap-3 text-left">
+              <label htmlFor="contact-message" className="text-[10px] font-mono tracking-[0.25em] text-zinc-500 uppercase">
                 The Intent / Message
               </label>
               <textarea
@@ -147,23 +126,22 @@ export default function ContactSection() {
                 placeholder="What are we building?"
                 value={formState.message}
                 onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                className="w-full resize-none bg-transparent border-b border-white/[0.08] focus:border-white py-3 text-sm text-foreground placeholder:text-muted-foreground/20 outline-none transition-all duration-300 rounded-none font-sans"
+                className="w-full resize-none bg-transparent border-b border-zinc-800 focus:border-white py-4 text-base md:text-lg text-white placeholder:text-zinc-700 outline-none transition-all duration-500 rounded-none font-sans"
               />
             </div>
 
             {/* Submit Action */}
             <div className="pt-4 flex items-center justify-between gap-6 flex-wrap">
-              <span className="text-[10px] tracking-wide text-muted-foreground/30 font-mono select-none">
-                {"// System will route to primary inbox."}
+              <span className="text-[10px] tracking-widest text-zinc-600 font-mono select-none">
+                {"// Routing directly to primary inbox."}
               </span>
               
               <button
                 type="submit"
                 disabled={submitted}
-                className="group/btn inline-flex items-center gap-2 text-xs font-semibold tracking-wider text-foreground hover:text-white uppercase transition-colors duration-300 disabled:opacity-50"
+                className="group/btn inline-flex items-center gap-2 text-xs font-bold tracking-widest text-white hover:text-zinc-400 uppercase transition-colors duration-300 disabled:opacity-50"
               >
-                <span>{submitted ? "Message Sent" : "Submit Intent"}</span>
-                <ArrowRightIcon className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                <span>{submitted ? "Message Sent" : "Submit Intent →"}</span>
               </button>
             </div>
           </form>
@@ -171,17 +149,17 @@ export default function ContactSection() {
 
         {/* Direct Channels & Social Row */}
         <div className="mt-32 pt-16 border-t border-white/[0.04] flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-          <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-6 gap-y-2 text-xs text-muted-foreground/40">
-            <span className="select-none text-muted-foreground/20">Direct:</span>
-            <a href="https://wa.me/919426180574" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300 font-semibold">
+          <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-6 gap-y-2 text-xs text-zinc-500">
+            <span className="select-none text-zinc-700">Direct:</span>
+            <a href="https://wa.me/919426180574" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300 font-bold uppercase tracking-wider">
               WhatsApp
             </a>
-            <span className="text-muted-foreground/15 select-none">·</span>
-            <a href="tel:+919426180574" className="hover:text-white transition-colors duration-300 font-semibold">
+            <span className="text-zinc-800 select-none">·</span>
+            <a href="tel:+919426180574" className="hover:text-white transition-colors duration-300 font-bold uppercase tracking-wider">
               Call
             </a>
-            <span className="text-muted-foreground/15 select-none">·</span>
-            <a href={`mailto:${siteConfig.email}`} className="hover:text-white transition-colors duration-300 font-semibold">
+            <span className="text-zinc-800 select-none">·</span>
+            <a href={`mailto:${siteConfig.email}`} className="hover:text-white transition-colors duration-300 font-bold uppercase tracking-wider">
               Email
             </a>
           </div>
@@ -196,7 +174,7 @@ export default function ContactSection() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground/40 hover:text-white transition-colors duration-300 p-1"
+                  className="text-zinc-500 hover:text-white transition-colors duration-300 p-1"
                   aria-label={link.label}
                 >
                   <Icon className="w-4 h-4" />
@@ -210,3 +188,4 @@ export default function ContactSection() {
     </section>
   );
 }
+
