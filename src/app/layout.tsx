@@ -5,7 +5,6 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import LenisProvider from "@/components/providers/LenisProvider";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import ScrollProgress from "@/components/layout/ScrollProgress";
 import CommandMenu from "@/components/layout/CommandMenu";
 import MobileFloatingCTA from "@/components/layout/MobileFloatingCTA";
 
@@ -61,7 +60,6 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col noise-overlay bg-background text-foreground transition-colors duration-300">
         <ThemeProvider>
           <LenisProvider>
-            <ScrollProgress />
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />

@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 const editorialStories: Record<string, string> = {
   leadsark: "Autonomous pipeline orchestration. Intelligent qualification, nurturing, and closures.",
   "intent-ai": "The speed of thought. Converting developer intent into production architecture in real-time.",
-  "your-music-space": "Acoustic purity. Zero advertisements. Synced multi-platform auditory ecosystem.",
 };
 
 function ProjectCanvas({ gradient, title, id }: { gradient: string; title: string; id: string }) {
@@ -17,7 +16,7 @@ function ProjectCanvas({ gradient, title, id }: { gradient: string; title: strin
     <div className="relative group w-full aspect-video rounded-lg border border-white/[0.04] bg-zinc-950/40 backdrop-blur-3xl overflow-hidden flex items-center justify-center p-6 md:p-12">
       {/* Lighting Drift Overlay */}
       <div className="pointer-events-none absolute inset-0 z-0">
-        <div className={cn("absolute -inset-[50%] opacity-15 blur-[100px] transition-transform duration-1000 group-hover:scale-110 bg-gradient-to-tr", gradient)} />
+        <div className={cn("absolute -inset-[50%] opacity-10 blur-[120px] transition-transform duration-1000 group-hover:scale-110 bg-gradient-to-tr", gradient)} />
       </div>
 
       {/* Abstract App Window */}
@@ -52,8 +51,9 @@ function ProjectCanvas({ gradient, title, id }: { gradient: string; title: strin
 }
 
 export default function ProjectsSection() {
-  const featuredProjects = projects.filter((p) => p.featured);
-  const otherProjects = projects.filter((p) => !p.featured);
+  const featuredIds = ["leadsark", "intent-ai"];
+  const featuredProjects = projects.filter((p) => featuredIds.includes(p.id));
+  const otherProjects = projects.filter((p) => !featuredIds.includes(p.id));
 
   return (
     <section id="projects" className="relative w-full bg-black py-20 select-none">
@@ -61,9 +61,9 @@ export default function ProjectsSection() {
         {/* Section Header - Massive display title */}
         <div className="mb-12 pt-20">
           <span className="text-[10px] tracking-[0.25em] text-zinc-600 font-bold uppercase block mb-3">
-            Selected Works
+            {"03 // Selected Works"}
           </span>
-          <h2 className="text-[clamp(3rem,8vw,6.5rem)] font-black tracking-[-0.05em] leading-[0.9] text-white uppercase">
+          <h2 className="text-[clamp(3.5rem,8vw,6.5rem)] font-black tracking-[-0.05em] leading-[0.9] text-white uppercase">
             The Monoliths.
           </h2>
         </div>
@@ -81,9 +81,9 @@ export default function ProjectsSection() {
         {/* Understated Typographic Catalog (Additional Deployments) */}
         {otherProjects.length > 0 && (
           <div className="mt-24 pt-24 border-t border-white/[0.04]">
-            <div className="mb-16">
+            <div className="mb-12">
               <span className="text-[10px] tracking-[0.25em] text-zinc-600 font-bold uppercase block mb-2">
-                Archives
+                {"04 // Archives"}
               </span>
               <h3 className="text-2xl font-bold tracking-tight text-white uppercase">
                 Additional Shipments
@@ -94,24 +94,15 @@ export default function ProjectsSection() {
               {otherProjects.map((project) => (
                 <div
                   key={project.id}
-                  className="py-8 flex flex-col md:flex-row md:items-center justify-between gap-6 group transition-colors duration-300"
+                  className="py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 group transition-colors duration-300"
                 >
-                  <div className="flex flex-col gap-2 max-w-md">
-                    <span className="text-lg font-bold text-white group-hover:text-zinc-300 transition-colors duration-300">
+                  <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 flex-1">
+                    <span className="text-base font-bold text-white group-hover:text-zinc-300 transition-colors duration-300 w-44 shrink-0">
                       {project.title}
                     </span>
                     <span className="text-sm text-zinc-500 leading-relaxed font-light">
                       {project.description}
                     </span>
-                  </div>
-
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-600 font-mono uppercase">
-                    {project.tech.map((t, i) => (
-                      <span key={t}>
-                        {t}
-                        {i < project.tech.length - 1 && <span className="ml-3 text-zinc-800 select-none">·</span>}
-                      </span>
-                    ))}
                   </div>
 
                   <div className="flex items-center gap-6">
@@ -158,7 +149,7 @@ function ProjectBlock({ project, isEven, index }: { project: Project; isEven: bo
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col gap-6"
           >
             {/* Index Tracker */}
@@ -166,14 +157,6 @@ function ProjectBlock({ project, isEven, index }: { project: Project; isEven: bo
               <span className="text-[10px] tracking-[0.25em] text-zinc-600 font-bold uppercase">
                 {"// Campaign / 0"}{index + 1}
               </span>
-              {project.metrics && (
-                <>
-                  <span className="text-zinc-800 text-xs select-none">|</span>
-                  <span className="text-[10px] tracking-[0.15em] font-semibold text-white/60 uppercase">
-                    {project.metrics}
-                  </span>
-                </>
-              )}
             </div>
 
             {/* Giant Title */}
@@ -185,15 +168,6 @@ function ProjectBlock({ project, isEven, index }: { project: Project; isEven: bo
             <p className="text-xl md:text-2xl leading-relaxed text-zinc-400 font-light max-w-xl">
               {editorialStories[project.id] || project.longDescription}
             </p>
-
-            {/* Understated Tech Stack Row */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-zinc-600 font-mono py-4 border-y border-white/[0.04] uppercase">
-              {project.tech.map((t) => (
-                <span key={t}>
-                  {"// "}{t}
-                </span>
-              ))}
-            </div>
 
             {/* Action Links */}
             <div className="flex items-center gap-8 pt-4">
@@ -220,9 +194,9 @@ function ProjectBlock({ project, isEven, index }: { project: Project; isEven: bo
         {/* Visual Canvas Column */}
         <div className={cn("lg:col-span-6 w-full", isEven ? "lg:order-2" : "lg:order-1")}>
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
           >
             <ProjectCanvas gradient={project.gradient} title={project.title} id={project.id} />
           </motion.div>
