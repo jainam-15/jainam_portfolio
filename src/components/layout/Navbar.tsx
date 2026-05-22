@@ -250,16 +250,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Separator */}
-          <div className="w-px h-5 bg-border/60 mx-1" />
 
-          {/* Telemetry metadata panel */}
-          <div className="hidden lg:flex flex-col items-start px-2 font-mono text-[9px] text-muted-foreground/60 leading-none select-none">
-            <div className="text-foreground/80 font-medium">SYS_OP // ACTIVE</div>
-            <div className="text-[8px] text-blue-400/80 mt-0.5 font-bold tracking-wider">23.0225° N, 72.5714° E</div>
-          </div>
-
-          <div className="hidden lg:block w-px h-5 bg-border/60 mx-1" />
 
           {/* Theme Toggle */}
           <motion.button

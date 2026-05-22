@@ -39,18 +39,15 @@ export default function ExperienceSection() {
     <section
       id="experience"
       ref={sectionRef}
-      className="relative py-36 sm:py-44 border-t border-white/5"
+      className="relative py-32 md:py-48 border-t border-border bg-background"
     >
-      {/* Blueprint grid backdrop */}
-      <div className="pointer-events-none absolute inset-0 -z-10 blueprint-grid opacity-10" />
-
       {/* Ambient background glow */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden -z-10">
-        <div className="absolute top-1/3 left-1/4 h-96 w-96 rounded-full bg-blue-500/5 blur-[120px]" />
-        <div className="absolute bottom-1/3 right-1/4 h-96 w-96 rounded-full bg-purple-500/5 blur-[120px]" />
+        <div className="absolute top-1/3 left-1/4 h-96 w-96 rounded-full bg-blue-500/[0.03] blur-[120px]" />
+        <div className="absolute bottom-1/3 right-1/4 h-96 w-96 rounded-full bg-purple-500/[0.02] blur-[120px]" />
       </div>
 
-      <div className="relative mx-auto max-w-5xl px-6 lg:px-8">
+      <div className="relative mx-auto max-w-4xl px-6">
         
         {/* Section Heading */}
         <motion.div
@@ -58,19 +55,19 @@ export default function ExperienceSection() {
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="mb-24 text-left border-l-2 border-blue-500/80 pl-6"
+          className="mb-24 text-center"
         >
           <motion.div
             variants={fadeInUp}
-            className="font-mono text-xs tracking-[0.3em] text-blue-500/80 font-bold mb-2"
+            className="text-[10px] tracking-[0.2em] text-muted-foreground/50 font-bold uppercase mb-3"
           >
-            {"// EXECUTION_LOGS // STACK_TRACE"}
+            History
           </motion.div>
           <motion.h2
             variants={fadeInUp}
-            className="text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl lg:text-6xl uppercase"
+            className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl md:text-5xl uppercase"
           >
-            Trace Timeline
+            Experience
           </motion.h2>
         </motion.div>
 
@@ -79,7 +76,7 @@ export default function ExperienceSection() {
           {/* Vertical active trace line */}
           <div className="absolute top-0 left-[11px] sm:left-[15px] h-full w-px origin-top">
             {/* Background track */}
-            <div className="absolute inset-0 bg-white/5" />
+            <div className="absolute inset-0 bg-border/50" />
             {/* Animated laser line */}
             <motion.div
               style={{ scaleY: lineScaleY }}
@@ -99,9 +96,6 @@ export default function ExperienceSection() {
   );
 }
 
-// ─────────────────────────────────────────────
-// Timeline Entry Sub-component (Terminal log design)
-// ─────────────────────────────────────────────
 interface TimelineEntryProps {
   entry: (typeof experience)[number];
   index: number;
@@ -112,13 +106,13 @@ function TimelineEntry({ entry, index }: TimelineEntryProps) {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   const cardVariants = {
-    hidden: { opacity: 0, x: -30 },
+    hidden: { opacity: 0, x: -20 },
     visible: {
       opacity: 1,
       x: 0,
       transition: {
-        duration: 0.7,
-        delay: index * 0.15,
+        duration: 0.8,
+        delay: index * 0.1,
         ease: [0.16, 1, 0.3, 1] as const,
       },
     },
@@ -135,60 +129,50 @@ function TimelineEntry({ entry, index }: TimelineEntryProps) {
         animate={isInView ? "visible" : "hidden"}
         className="relative z-10 mt-6 flex size-[22px] sm:size-[30px] shrink-0 items-center justify-center"
       >
-        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 opacity-30 blur-[6px]" />
+        <span className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 opacity-20 blur-[4px]" />
         <span className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500 to-purple-500" />
         <span className="relative size-2 sm:size-2.5 rounded-full bg-black" />
       </motion.div>
 
-      {/* Terminal log panel card */}
+      {/* Content card */}
       <motion.div
         custom={index}
         variants={cardVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="group flex-1 rounded-lg border border-white/5 bg-black/40 p-5 sm:p-6 backdrop-blur-xl transition-all duration-300 hover:border-blue-500/20 hover:shadow-lg hover:shadow-blue-500/5"
+        className="group flex-1 rounded-2xl border border-white/[0.04] bg-black/[0.15] dark:bg-white/[0.01] p-6 sm:p-8 backdrop-blur-md transition-all duration-300 hover:border-foreground/[0.08]"
       >
-        {/* Terminal Header */}
-        <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-4 font-mono text-[8px] tracking-widest text-muted-foreground/35 select-none">
-          <span>LOG_TRACE // STEP_0{index + 1}</span>
-          <span className="text-emerald-400 font-bold">OP_SUCCESS // RUNNING</span>
-        </div>
-
-        {/* CAD Corner crosshairs */}
-        <div className="hud-crosshair hud-crosshair-tl opacity-40 group-hover:opacity-100 transition-opacity" />
-        <div className="hud-crosshair hud-crosshair-br opacity-40 group-hover:opacity-100 transition-opacity" />
-
         {/* Role, Company, Period block */}
-        <div className="mb-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <h3 className="text-lg font-bold tracking-tight sm:text-xl font-mono uppercase">
-              {entry.role.replace(/\s/g, "_")}
+        <div className="mb-5">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 className="text-xl font-bold tracking-tight text-foreground">
+              {entry.role}
             </h3>
-            <span className="inline-flex items-center rounded border border-blue-500/20 bg-blue-500/5 px-2 py-0.5 text-[10px] font-mono text-blue-400">
+            <span className="inline-flex items-center rounded-full border border-blue-500/20 bg-blue-500/5 px-3 py-1 text-[10px] font-semibold text-blue-400">
               {entry.duration}
             </span>
           </div>
           
-          <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs font-mono text-muted-foreground">
-            <span className="text-foreground/80">ORG: {entry.company}</span>
-            <span className="text-white/10">|</span>
-            <span>PERIOD: {entry.period}</span>
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted-foreground/80">
+            <span className="font-semibold text-foreground/80">{entry.company}</span>
+            <span className="text-border">|</span>
+            <span className="font-medium">{entry.period}</span>
           </div>
         </div>
 
         {/* Details Paragraph */}
-        <p className="mb-6 text-sm leading-relaxed text-muted-foreground/80 font-sans">
+        <p className="mb-6 text-sm md:text-base leading-relaxed text-muted-foreground/75 font-normal">
           {entry.description}
         </p>
 
         {/* Tech readouts tags */}
-        <div className="flex flex-wrap gap-1.5 border-t border-white/5 pt-4">
+        <div className="flex flex-wrap gap-1.5 border-t border-border/20 pt-5">
           {entry.tech.map((tech) => (
             <span
               key={tech}
-              className="rounded bg-white/5 px-2 py-0.5 text-[9px] font-mono text-muted-foreground/75 tracking-wider select-none"
+              className="rounded-full bg-white/[0.04] dark:bg-white/[0.02] border border-border/60 px-3 py-1 text-xs text-muted-foreground/80 font-medium select-none"
             >
-              #{tech.toLowerCase()}
+              {tech}
             </span>
           ))}
         </div>

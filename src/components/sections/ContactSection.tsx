@@ -20,7 +20,6 @@ import {
   defaultViewport,
   scaleIn,
 } from "@/lib/animations";
-import { cn } from "@/lib/utils";
 
 const socialIconMap: Record<string, LucideIcon> = {
   github: Github,
@@ -33,22 +32,16 @@ const ctaCards = [
     label: "WhatsApp",
     href: "https://wa.me/919426180574",
     icon: MessageCircle,
-    hoverBorder: "hover:border-green-500/20",
-    sysKey: "WA_COMM // CHAT",
   },
   {
-    label: "Phone Dial",
+    label: "Phone",
     href: "tel:+919426180574",
     icon: Phone,
-    hoverBorder: "hover:border-blue-500/20",
-    sysKey: "DIAL_COMM // VOICE",
   },
   {
-    label: "Email Box",
+    label: "Email",
     href: `mailto:${siteConfig.email}`,
     icon: Mail,
-    hoverBorder: "hover:border-purple-500/20",
-    sysKey: "SMTP_COMM // SEND",
   },
 ] as const;
 
@@ -60,17 +53,14 @@ export default function ContactSection() {
     <section
       id="contact"
       ref={sectionRef}
-      className="relative overflow-hidden py-36 sm:py-44 border-t border-white/5"
+      className="relative overflow-hidden py-32 md:py-48 border-t border-border bg-background"
     >
-      {/* Blueprint grid underlay */}
-      <div className="pointer-events-none absolute inset-0 -z-10 blueprint-grid opacity-10" />
-
       {/* Ambient background glow */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-1/2 left-1/2 h-[1000px] w-[1000px] -translate-x-1/2 rounded-full bg-gradient-to-br from-blue-500/5 via-violet-500/3 to-purple-500/5 blur-[120px]" />
+        <div className="absolute -top-1/2 left-1/2 h-[800px] w-[800px] -translate-x-1/2 rounded-full bg-gradient-to-br from-blue-500/[0.02] to-purple-500/[0.02] blur-[120px]" />
       </div>
 
-      <div className="relative mx-auto max-w-5xl px-6 lg:px-8">
+      <div className="relative mx-auto max-w-4xl px-6">
         
         {/* Section Heading */}
         <motion.div
@@ -78,24 +68,24 @@ export default function ContactSection() {
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="mb-24 text-left border-l-2 border-blue-500/80 pl-6"
+          className="mb-24 text-center"
         >
           <motion.div
             variants={fadeInUp}
-            className="font-mono text-xs tracking-[0.3em] text-blue-500/80 font-bold mb-2"
+            className="text-[10px] tracking-[0.2em] text-muted-foreground/50 font-bold uppercase mb-3"
           >
-            {"// COMMUNICATION_HUB // INTAKE"}
+            Connection
           </motion.div>
           <motion.h2
             variants={fadeInUp}
-            className="text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl lg:text-6xl uppercase"
+            className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl md:text-5xl uppercase"
           >
-            {"Let's Collaborate"}
+            Get In Touch
           </motion.h2>
         </motion.div>
 
-        {/* CTA Telemetry Cards */}
-        <div className="mx-auto mb-20 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
+        {/* CTA Contact Links */}
+        <div className="mx-auto mb-16 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-3">
           {ctaCards.map((cta, i) => {
             const Icon = cta.icon;
             return (
@@ -108,36 +98,23 @@ export default function ContactSection() {
                 variants={fadeInUp}
                 initial="hidden"
                 animate={isInView ? "visible" : "hidden"}
-                className={cn(
-                  "group relative flex flex-col items-start gap-4 rounded-lg border border-white/5 bg-black/40 p-5 text-left backdrop-blur-xl transition-all duration-300",
-                  cta.hoverBorder
-                )}
+                className="group relative flex items-center justify-between rounded-2xl border border-white/[0.04] bg-white/[0.01] p-6 transition-all duration-300 hover:border-foreground/[0.08]"
               >
-                {/* CAD Crosshairs */}
-                <div className="hud-crosshair hud-crosshair-tl opacity-40 group-hover:opacity-100" />
-                <div className="hud-crosshair hud-crosshair-br opacity-40 group-hover:opacity-100" />
-
-                {/* Telemetry label */}
-                <span className="font-mono text-[8px] tracking-widest text-muted-foreground/35 select-none">
-                  {cta.sysKey}
-                </span>
-
-                <div className="flex items-center gap-3">
-                  <div className="flex size-9 items-center justify-center rounded border border-white/5 bg-white/5">
-                    <Icon className="size-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                <div className="flex items-center gap-4">
+                  <div className="flex size-10 items-center justify-center rounded-lg border border-white/[0.05] bg-white/[0.02] text-muted-foreground group-hover:text-foreground transition-colors">
+                    <Icon className="size-4" />
                   </div>
-                  <span className="text-sm font-mono tracking-wider text-foreground">
-                    {cta.label.toUpperCase()}
+                  <span className="text-sm font-semibold text-foreground">
+                    {cta.label}
                   </span>
                 </div>
-
-                <ArrowUpRight className="absolute top-4 right-4 size-3 text-muted-foreground/35 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground" />
+                <ArrowUpRight className="size-4 text-muted-foreground/45 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-foreground" />
               </motion.a>
             );
           })}
         </div>
 
-        {/* Contact Intake Form - CLI Prompt layout */}
+        {/* Contact Form */}
         <motion.div
           variants={scaleIn}
           initial="hidden"
@@ -154,7 +131,7 @@ export default function ContactSection() {
           initial="hidden"
           whileInView="visible"
           viewport={defaultViewport}
-          className="mt-20 flex items-center justify-center gap-4 border-t border-white/5 pt-8"
+          className="mt-24 flex items-center justify-center gap-4 border-t border-border/40 pt-8"
         >
           {socialLinks.map((link) => {
             const Icon = socialIconMap[link.icon] ?? Github;
@@ -165,12 +142,12 @@ export default function ContactSection() {
                 target="_blank"
                 rel="noopener noreferrer"
                 variants={fadeInUp}
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className="group flex size-10 items-center justify-center rounded border border-white/5 bg-black/40 hover:bg-white/5 transition-colors duration-300"
+                whileHover={{ scale: 1.05, y: -1 }}
+                whileTap={{ scale: 0.98 }}
+                className="group flex size-10 items-center justify-center rounded-full border border-white/[0.05] bg-white/[0.01] hover:border-foreground/[0.1] hover:bg-white/[0.03] transition-all duration-300"
                 aria-label={link.label}
               >
-                <Icon className="size-[16px] text-muted-foreground transition-colors group-hover:text-white" />
+                <Icon className="size-4 text-muted-foreground transition-colors group-hover:text-foreground" />
               </motion.a>
             );
           })}
@@ -180,9 +157,6 @@ export default function ContactSection() {
   );
 }
 
-// ─────────────────────────────────────────────
-// Contact Form Component (CLI command layout)
-// ─────────────────────────────────────────────
 function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
@@ -200,97 +174,80 @@ function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="group relative rounded-lg border border-white/5 bg-black/45 p-6 backdrop-blur-xl sm:p-8"
+      className="group relative rounded-2xl border border-white/[0.04] bg-white/[0.01] p-8 md:p-10 backdrop-blur-md"
     >
-      {/* CAD Crosshairs */}
-      <div className="hud-crosshair hud-crosshair-tl opacity-60" />
-      <div className="hud-crosshair hud-crosshair-tr opacity-60" />
-      <div className="hud-crosshair hud-crosshair-bl opacity-60" />
-      <div className="hud-crosshair hud-crosshair-br opacity-60" />
-
-      {/* Terminal Title Bar */}
-      <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-6 font-mono text-[9px] tracking-widest text-muted-foreground/40 select-none">
-        <span>{"SYSTEM_INBOX // INTENT_SHELL // ONLINE"}</span>
-        <span className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
-          SECURE_TLS
-        </span>
-      </div>
-
       <div className="space-y-6">
         
-        {/* Name Prompt Input */}
-        <div className="font-mono space-y-1 text-left">
-          <label htmlFor="contact-name" className="text-xs text-blue-400">
-            guest@jainam_shah:~$ enter --name:
+        {/* Name Input */}
+        <div className="space-y-2 text-left">
+          <label htmlFor="contact-name" className="text-xs font-semibold tracking-wider text-muted-foreground/70 uppercase">
+            Name
           </label>
           <input
             id="contact-name"
             type="text"
             required
-            placeholder="Your name..."
+            placeholder="John Doe"
             value={formState.name}
             onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-            className="flex h-10 w-full rounded border border-white/5 bg-white/[0.02] px-3 font-mono text-xs text-foreground placeholder:text-muted-foreground/30 focus:border-blue-500/30 focus:bg-white/[0.04] outline-none transition-all"
+            className="flex h-12 w-full rounded-lg border border-white/[0.05] bg-white/[0.02] px-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/30 focus:border-white/20 focus:bg-white/[0.04] outline-none transition-all"
           />
         </div>
 
-        {/* Email Prompt Input */}
-        <div className="font-mono space-y-1 text-left">
-          <label htmlFor="contact-email" className="text-xs text-blue-400">
-            guest@jainam_shah:~$ enter --email:
+        {/* Email Input */}
+        <div className="space-y-2 text-left">
+          <label htmlFor="contact-email" className="text-xs font-semibold tracking-wider text-muted-foreground/70 uppercase">
+            Email Address
           </label>
           <input
             id="contact-email"
             type="email"
             required
-            placeholder="you@example.com..."
+            placeholder="john@example.com"
             value={formState.email}
             onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-            className="flex h-10 w-full rounded border border-white/5 bg-white/[0.02] px-3 font-mono text-xs text-foreground placeholder:text-muted-foreground/30 focus:border-blue-500/30 focus:bg-white/[0.04] outline-none transition-all"
+            className="flex h-12 w-full rounded-lg border border-white/[0.05] bg-white/[0.02] px-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/30 focus:border-white/20 focus:bg-white/[0.04] outline-none transition-all"
           />
         </div>
 
-        {/* Message Prompt Input */}
-        <div className="font-mono space-y-1 text-left">
-          <label htmlFor="contact-message" className="text-xs text-blue-400">
-            guest@jainam_shah:~$ enter --message:
+        {/* Message Input */}
+        <div className="space-y-2 text-left">
+          <label htmlFor="contact-message" className="text-xs font-semibold tracking-wider text-muted-foreground/70 uppercase">
+            Message
           </label>
           <textarea
             id="contact-message"
             required
-            rows={4}
-            placeholder="Describe your product requirements or ideas..."
+            rows={5}
+            placeholder="Tell me about your project..."
             value={formState.message}
             onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-            className="flex w-full resize-none rounded border border-white/5 bg-white/[0.02] p-3 font-mono text-xs text-foreground placeholder:text-muted-foreground/30 focus:border-blue-500/30 focus:bg-white/[0.04] outline-none transition-all"
+            className="flex w-full resize-none rounded-lg border border-white/[0.05] bg-white/[0.02] p-4 font-sans text-sm text-foreground placeholder:text-muted-foreground/30 focus:border-white/20 focus:bg-white/[0.04] outline-none transition-all"
           />
         </div>
 
       </div>
 
-      {/* Submit execution block */}
+      {/* Submit Button */}
       <motion.button
         type="submit"
-        whileHover={{ scale: 1.01 }}
+        whileHover={{ y: -1 }}
         whileTap={{ scale: 0.98 }}
         disabled={submitted}
-        className="mt-8 flex h-11 w-full items-center justify-center gap-2 rounded border border-blue-500/30 bg-blue-500/10 font-mono text-xs text-blue-400 tracking-wider hover:bg-blue-500/15 disabled:opacity-50 transition-all select-none"
+        className="mt-8 flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-foreground text-background font-sans text-sm font-semibold tracking-wide hover:opacity-90 disabled:opacity-50 transition-all select-none"
       >
         {submitted ? (
-          <>
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="inline-block font-bold text-emerald-400"
-            >
-              [ ✓ TRANSMISSION_SUCCESS ]
-            </motion.span>
-          </>
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="font-semibold"
+          >
+            Message Sent Successfully
+          </motion.span>
         ) : (
           <>
-            <Send className="size-3.5" />
-            <span>guest@jainam_shah:~$ execute --transmit</span>
+            <Send className="size-4" />
+            <span>Send Message</span>
           </>
         )}
       </motion.button>
