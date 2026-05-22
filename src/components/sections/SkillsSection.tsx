@@ -19,7 +19,7 @@ import {
 import { cn } from "@/lib/utils";
 
 // ─────────────────────────────────────────────
-// Icon map — matches the `icon` field in constants
+// Icon map
 // ─────────────────────────────────────────────
 const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
   layout: Layout,
@@ -31,38 +31,37 @@ const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>
 };
 
 // ─────────────────────────────────────────────
-// Skill Pill — animated badge
+// Skill Pill — monospaced parameter tag
 // ─────────────────────────────────────────────
 function SkillPill({ name }: { name: string }) {
   return (
     <motion.span
       variants={fadeInUp}
-      whileHover={{ scale: 1.08 }}
+      whileHover={{ scale: 1.05 }}
       className={cn(
-        "inline-flex cursor-default select-none items-center rounded-full px-3 py-1 text-xs font-medium",
-        "bg-muted/60 text-muted-foreground",
-        "ring-1 ring-border/50",
+        "inline-flex cursor-default select-none items-center rounded px-2.5 py-1 text-xs font-mono tracking-wider",
+        "bg-white/5 text-muted-foreground/90 border border-white/5",
         "transition-all duration-300",
-        "hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10",
-        "hover:text-foreground",
-        "hover:ring-blue-500/30 hover:shadow-sm hover:shadow-blue-500/10",
+        "hover:bg-blue-500/10 hover:text-blue-400 hover:border-blue-500/20",
+        "hover:shadow-sm"
       )}
     >
-      {name}
+      &lt;{name.toLowerCase().replace(/\s/g, "_")}&gt;
     </motion.span>
   );
 }
 
 // ─────────────────────────────────────────────
-// Category Card — glass card with spotlight
+// Category Card — HUD System Panel
 // ─────────────────────────────────────────────
 interface CategoryCardProps {
   category: string;
   icon: string;
   items: readonly string[];
+  index: number;
 }
 
-function CategoryCard({ category, icon, items }: CategoryCardProps) {
+function CategoryCard({ category, icon, items, index }: CategoryCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [spotlightPos, setSpotlightPos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
@@ -87,53 +86,77 @@ function CategoryCard({ category, icon, items }: CategoryCardProps) {
       onMouseLeave={() => setIsHovered(false)}
       whileHover={{ y: -4, transition: { duration: 0.3, ease: "easeOut" } }}
       className={cn(
-        "group relative overflow-hidden rounded-2xl border border-border/50 p-6",
-        "bg-card/50 backdrop-blur-xl",
-        "transition-shadow duration-500 ease-out",
-        "hover:border-blue-500/30",
-        "hover:shadow-xl hover:shadow-blue-500/5",
+        "group relative overflow-hidden rounded-xl border border-white/5 p-6",
+        "bg-black/35 backdrop-blur-xl",
+        "transition-all duration-500 ease-out",
+        "hover:border-blue-500/20 hover:shadow-xl hover:shadow-blue-500/5"
       )}
     >
+      {/* Blueprint grid underlay */}
+      <div className="pointer-events-none absolute inset-0 blueprint-grid opacity-[0.1] group-hover:opacity-[0.2] transition-opacity" />
+      <div className="pointer-events-none absolute inset-0 dot-matrix opacity-[0.1] group-hover:opacity-[0.15] transition-opacity" />
+
+      {/* CAD Crosshairs */}
+      <div className="hud-crosshair hud-crosshair-tl opacity-40 group-hover:opacity-100 transition-opacity" />
+      <div className="hud-crosshair hud-crosshair-br opacity-40 group-hover:opacity-100 transition-opacity" />
+
       {/* Spotlight effect */}
       <div
         className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         style={{
           background: isHovered
-            ? `radial-gradient(280px circle at ${spotlightPos.x}px ${spotlightPos.y}px, rgba(59,130,246,0.07), transparent 60%)`
+            ? `radial-gradient(280px circle at ${spotlightPos.x}px ${spotlightPos.y}px, rgba(59,130,246,0.06), transparent 60%)`
             : "none",
         }}
       />
 
-      <div className="relative z-10">
-        {/* Header */}
-        <div className="mb-5 flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 ring-1 ring-blue-500/20 transition-all duration-300 group-hover:ring-blue-500/40 group-hover:shadow-md group-hover:shadow-blue-500/10">
-            <Icon className="h-5 w-5 text-blue-400 transition-colors duration-300 group-hover:text-blue-300" />
+      <div className="relative z-10 flex flex-col h-full justify-between">
+        <div>
+          {/* Telemetry Header */}
+          <div className="flex justify-between items-center mb-5 font-mono text-[8px] tracking-widest text-muted-foreground/45 group-hover:text-muted-foreground/60 transition-colors select-none">
+            <span>MOD_LOAD // 0{index + 1}</span>
+            <span className="flex items-center gap-1">
+              <span className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse" />
+              STABLE
+            </span>
           </div>
-          <h3 className="text-base font-semibold tracking-tight text-foreground">
-            {category}
-          </h3>
+
+          {/* Module Title */}
+          <div className="mb-6 flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/5 bg-white/5 ring-1 ring-white/5 transition-all duration-300 group-hover:border-blue-500/30 group-hover:ring-blue-500/10">
+              <Icon className="h-5 w-5 text-blue-400/80 transition-colors duration-300 group-hover:text-blue-400" />
+            </div>
+            <h3 className="text-base font-mono tracking-wider uppercase text-foreground">
+              {category.split(" ")[0]}_SYS
+            </h3>
+          </div>
+
+          {/* Skill pills */}
+          <motion.div
+            variants={staggerFast}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+            className="flex flex-wrap gap-2"
+          >
+            {items.map((skill) => (
+              <SkillPill key={skill} name={skill} />
+            ))}
+          </motion.div>
         </div>
 
-        {/* Skill pills */}
-        <motion.div
-          variants={staggerFast}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          className="flex flex-wrap gap-2"
-        >
-          {items.map((skill) => (
-            <SkillPill key={skill} name={skill} />
-          ))}
-        </motion.div>
+        {/* Bottom Panel Telemetry Details */}
+        <div className="mt-8 pt-3 border-t border-white/5 flex justify-between font-mono text-[7px] tracking-widest text-muted-foreground/30 select-none">
+          <span>PORT: 808{index}</span>
+          <span>SYS_LATENCY: 0.0{index + 2}ms</span>
+        </div>
       </div>
     </motion.div>
   );
 }
 
 // ─────────────────────────────────────────────
-// SkillsSection — main export
+// SkillsSection Component
 // ─────────────────────────────────────────────
 export default function SkillsSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -143,28 +166,31 @@ export default function SkillsSection() {
     <section
       id="skills"
       ref={sectionRef}
-      className="relative w-full overflow-hidden py-24 md:py-32"
+      className="relative w-full overflow-hidden py-32 md:py-40 border-t border-white/5"
     >
+      {/* Blueprint grid layout underlay */}
+      <div className="pointer-events-none absolute inset-0 -z-10 blueprint-grid opacity-15" />
+
       {/* Ambient glow */}
-      <div className="pointer-events-none absolute right-0 top-1/3 -z-10 h-[500px] w-[700px] -translate-y-1/2 opacity-20 blur-[120px]">
-        <div className="h-full w-full rounded-full bg-gradient-to-bl from-purple-600/25 via-blue-600/15 to-transparent" />
+      <div className="pointer-events-none absolute right-0 top-1/2 -z-10 h-[600px] w-[800px] -translate-y-1/2 opacity-15 blur-[130px]">
+        <div className="h-full w-full rounded-full bg-gradient-to-bl from-purple-600/15 via-blue-600/10 to-transparent" />
       </div>
 
       <div className="mx-auto max-w-6xl px-6">
-        {/* Section heading */}
+        
+        {/* Section Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="mb-16 text-center"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-24 text-left border-l-2 border-blue-500/80 pl-6"
         >
-          <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl lg:text-5xl">
-            Skills &amp; Expertise
+          <div className="font-mono text-xs tracking-[0.3em] text-blue-500/80 font-bold mb-2">
+            {"// TELEMETRY_CAPABILITY // LIBRARY"}
+          </div>
+          <h2 className="text-4xl font-extrabold tracking-tighter text-foreground sm:text-5xl lg:text-6xl uppercase">
+            System Modules
           </h2>
-          <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
-          <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            A comprehensive toolkit spanning front-end craft, back-end architecture, AI integration, and design — refined through real-world product development.
-          </p>
         </motion.div>
 
         {/* Skills grid */}
@@ -174,12 +200,13 @@ export default function SkillsSection() {
           animate={isInView ? "visible" : "hidden"}
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {skills.map((skill) => (
+          {skills.map((skill, idx) => (
             <CategoryCard
               key={skill.category}
               category={skill.category}
               icon={skill.icon}
               items={skill.items}
+              index={idx}
             />
           ))}
         </motion.div>

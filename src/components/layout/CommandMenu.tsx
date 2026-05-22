@@ -242,6 +242,15 @@ export default function CommandMenu() {
                   </div>
                 )}
               </div>
+
+              {/* System Info Bar */}
+              <div className="flex items-center justify-between border-t border-border/40 bg-muted/40 px-4 py-2 font-mono text-[9px] text-muted-foreground/60 select-none">
+                <div className="flex items-center gap-1.5">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>CORE_STABLE // V1.0.0</span>
+                </div>
+                <div>ENV // PROD_DEVL</div>
+              </div>
             </motion.div>
           </div>
         )}

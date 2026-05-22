@@ -20,11 +20,10 @@ const stripContainer: Variants = {
 };
 
 const metricReveal: Variants = {
-  hidden: { opacity: 0, y: 30, filter: "blur(6px)" },
+  hidden: { opacity: 0, scale: 0.95 },
   visible: {
     opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
+    scale: 1,
     transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
   },
 };
@@ -51,7 +50,7 @@ function useCountUp(
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
 
-      // Ease-out cubic for a satisfying deceleration
+      // Ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.round(eased * target));
 
@@ -67,14 +66,16 @@ function useCountUp(
 }
 
 // ─────────────────────────────────────────────
-// Individual Metric Card
+// Telemetry Metric Card Component
 // ─────────────────────────────────────────────
 
 function MetricCard({
   metric,
+  index,
   isInView,
 }: {
   metric: (typeof metrics)[number];
+  index: number;
   isInView: boolean;
 }) {
   const count = useCountUp(metric.value, isInView);
@@ -83,35 +84,48 @@ function MetricCard({
   return (
     <motion.div
       variants={metricReveal}
-      className="group relative flex flex-col items-center justify-center px-4 py-6 text-center"
+      className="group relative flex flex-col items-start justify-between border-r border-b border-white/5 p-6 text-left hover:bg-white/[0.01] transition-colors duration-300"
     >
-      {/* Subtle separator line (not on first item of each row) */}
-      <div className="absolute left-0 top-1/2 hidden h-8 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-border to-transparent first:hidden lg:block" />
+      {/* Corner crosshair for each panel */}
+      <div className="hud-crosshair hud-crosshair-tl opacity-40 group-hover:opacity-100 transition-opacity" />
+      <div className="hud-crosshair hud-crosshair-br opacity-40 group-hover:opacity-100 transition-opacity" />
 
-      {/* Number / Value */}
-      <div className="text-3xl font-bold tracking-tight text-foreground transition-colors duration-300 sm:text-4xl">
-        {hasDisplayValue ? (
-          <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-            {metric.displayValue}
-          </span>
-        ) : (
-          <span>
-            <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent tabular-nums">
-              {count}
-            </span>
-            {metric.suffix && (
-              <span className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-                {metric.suffix}
-              </span>
-            )}
-          </span>
-        )}
+      {/* Sensor Metadata */}
+      <div className="w-full flex justify-between items-center font-mono text-[9px] tracking-widest text-muted-foreground/60 select-none">
+        <span>SENSOR // 0{index + 1}</span>
+        <span>SYS_OK</span>
       </div>
 
-      {/* Label */}
-      <span className="mt-1.5 text-xs font-medium tracking-wide text-muted-foreground uppercase sm:text-sm">
-        {metric.label}
-      </span>
+      {/* Main Metric Output */}
+      <div className="my-6">
+        <div className="text-3xl font-extrabold tracking-tight sm:text-4xl font-mono text-foreground">
+          {hasDisplayValue ? (
+            <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+              {metric.displayValue}
+            </span>
+          ) : (
+            <span className="flex items-baseline">
+              <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent tabular-nums">
+                {count}
+              </span>
+              {metric.suffix && (
+                <span className="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent ml-0.5">
+                  {metric.suffix}
+                </span>
+              )}
+            </span>
+          )}
+        </div>
+        {/* Label */}
+        <div className="mt-1 text-xs font-mono tracking-wider text-muted-foreground uppercase">
+          {metric.label}
+        </div>
+      </div>
+
+      {/* Dynamic Telemetry Hex Value */}
+      <div className="w-full font-mono text-[8px] tracking-widest text-muted-foreground/40 select-none">
+        <span>MEM_SECT // 0xAF{index}B{count}</span>
+      </div>
     </motion.div>
   );
 }
@@ -127,25 +141,25 @@ export default function MetricsStrip() {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden border-y border-border/50"
+      className="relative overflow-hidden border-y border-white/5 bg-black/40 backdrop-blur-md"
     >
-      {/* Subtle gradient background */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/[0.02] via-purple-500/[0.03] to-blue-500/[0.02] dark:from-blue-500/[0.04] dark:via-purple-500/[0.06] dark:to-blue-500/[0.04]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
-      </div>
+      {/* Subtle blueprint grid underlay */}
+      <div className="pointer-events-none absolute inset-0 -z-10 blueprint-grid opacity-25" />
+      <div className="pointer-events-none absolute inset-0 -z-10 dot-matrix opacity-40" />
 
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        {/* Telemetry panel layout */}
         <motion.div
           variants={stripContainer}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-2 divide-x divide-border/40 sm:grid-cols-3 lg:grid-cols-6"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 border-l border-white/5"
         >
-          {metrics.map((metric) => (
+          {metrics.map((metric, idx) => (
             <MetricCard
               key={metric.label}
               metric={metric}
+              index={idx}
               isInView={isInView}
             />
           ))}

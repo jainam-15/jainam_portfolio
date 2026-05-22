@@ -1,585 +1,307 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring, type Variants } from "framer-motion";
-import {
-  fadeInUp,
-  fadeInRight,
-  staggerContainer,
-  staggerFast,
-  blurIn,
-} from "@/lib/animations";
-import { siteConfig } from "@/lib/constants";
-
-// ─────────────────────────────────────────────
-// Animation Variants
-// ─────────────────────────────────────────────
-
-const heroContainer: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.3,
-    },
-  },
-};
-
-const lineReveal: Variants = {
-  hidden: { opacity: 0, y: 60, filter: "blur(8px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
-const pillFloat: Variants = {
-  hidden: { opacity: 0, scale: 0.5, y: 20 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
-const buttonReveal: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
-  },
-};
-
-// ─────────────────────────────────────────────
-// Floating Particles
-// ─────────────────────────────────────────────
-
-interface Particle {
-  id: number;
-  size: number;
-  x: number;
-  y: number;
-  duration: number;
-  delay: number;
-  opacity: number;
-}
-
-function FloatingParticles() {
-  const [particles, setParticles] = useState<Particle[]>([]);
-  useEffect(() => {
-    const generated = Array.from({ length: 22 }, (_, i) => ({
-      id: i,
-      size: Math.random() * 3 + 1,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      duration: Math.random() * 15 + 20,
-      delay: Math.random() * 10,
-      opacity: Math.random() * 0.4 + 0.1,
-    }));
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setParticles(generated);
-  }, []);
-
-  return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
-      {particles.map((p) => (
-        <div
-          key={p.id}
-          className="absolute rounded-full bg-blue-400/40 dark:bg-blue-400/30"
-          style={{
-            width: p.size,
-            height: p.size,
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            opacity: p.opacity,
-            animation: `heroFloat${p.id % 4} ${p.duration}s ease-in-out ${p.delay}s infinite`,
-          }}
-        />
-      ))}
-      <style jsx>{`
-        @keyframes heroFloat0 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          25% { transform: translate(30px, -40px) scale(1.2); }
-          50% { transform: translate(-20px, -80px) scale(0.8); }
-          75% { transform: translate(40px, -20px) scale(1.1); }
-        }
-        @keyframes heroFloat1 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(-40px, -50px) scale(1.3); }
-          66% { transform: translate(30px, -30px) scale(0.9); }
-        }
-        @keyframes heroFloat2 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          25% { transform: translate(50px, -20px) scale(0.7); }
-          50% { transform: translate(-30px, -60px) scale(1.2); }
-          75% { transform: translate(20px, -90px) scale(1); }
-        }
-        @keyframes heroFloat3 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          50% { transform: translate(-50px, -70px) scale(1.4); }
-        }
-      `}</style>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────
-// Mouse Spotlight
-// ─────────────────────────────────────────────
-
-function MouseSpotlight() {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 50, damping: 30 });
-  const springY = useSpring(mouseY, { stiffness: 50, damping: 30 });
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-    };
-    window.addEventListener("mousemove", handler);
-    return () => window.removeEventListener("mousemove", handler);
-  }, [mouseX, mouseY]);
-
-  return (
-    <motion.div
-      className="pointer-events-none fixed inset-0 z-0"
-      style={{
-        background: `radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(59,130,246,0.06), transparent 60%)`,
-      }}
-    >
-      <motion.div
-        className="absolute h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{
-          x: springX,
-          y: springY,
-          background:
-            "radial-gradient(circle, rgba(59,130,246,0.08) 0%, rgba(139,92,246,0.04) 40%, transparent 70%)",
-        }}
-      />
-    </motion.div>
-  );
-}
-
-// ─────────────────────────────────────────────
-// Animated Gradient Border Card
-// ─────────────────────────────────────────────
-
-const codeLines = [
-  { indent: 0, text: "const jainam = {", color: "text-blue-400" },
-  {
-    indent: 1,
-    text: 'role: "Full-Stack Engineer",',
-    color: "text-emerald-400",
-  },
-  {
-    indent: 1,
-    text: 'focus: ["AI", "SaaS", "Premium UX"],',
-    color: "text-amber-400",
-  },
-  { indent: 1, text: "available: true,", color: "text-purple-400" },
-  { indent: 0, text: "};", color: "text-blue-400" },
-];
-
-function TypingCodeCard() {
-  const [visibleLines, setVisibleLines] = useState(0);
-  const [currentChar, setCurrentChar] = useState(0);
-  const [showCursor, setShowCursor] = useState(true);
-
-  useEffect(() => {
-    if (visibleLines >= codeLines.length) return;
-
-    const currentLine = codeLines[visibleLines];
-    const totalChars = currentLine.text.length;
-
-    if (currentChar < totalChars) {
-      const timer = setTimeout(
-        () => setCurrentChar((c) => c + 1),
-        25 + Math.random() * 35
-      );
-      return () => clearTimeout(timer);
-    } else {
-      const timer = setTimeout(() => {
-        setVisibleLines((l) => l + 1);
-        setCurrentChar(0);
-      }, 150);
-      return () => clearTimeout(timer);
-    }
-  }, [visibleLines, currentChar]);
-
-  // Blinking cursor
-  useEffect(() => {
-    const timer = setInterval(() => setShowCursor((c) => !c), 530);
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <motion.div
-      variants={fadeInRight}
-      className="relative"
-    >
-      {/* Animated gradient border */}
-      <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 opacity-60 blur-[1px] dark:opacity-80" 
-           style={{ backgroundSize: "200% 100%", animation: "gradientShift 4s ease infinite" }} />
-      
-      {/* Card body */}
-      <div className="relative rounded-2xl border border-white/10 bg-white/80 p-6 shadow-2xl backdrop-blur-xl dark:bg-zinc-900/90">
-        {/* Terminal header */}
-        <div className="mb-4 flex items-center gap-2">
-          <div className="h-3 w-3 rounded-full bg-red-400/80" />
-          <div className="h-3 w-3 rounded-full bg-amber-400/80" />
-          <div className="h-3 w-3 rounded-full bg-green-400/80" />
-          <span className="ml-3 text-xs text-muted-foreground font-mono">
-            developer.ts
-          </span>
-        </div>
-
-        {/* Code block */}
-        <div className="font-mono text-sm leading-relaxed lg:text-base">
-          {codeLines.map((line, i) => {
-            if (i > visibleLines) return null;
-
-            const isCurrentLine = i === visibleLines;
-            const displayText = isCurrentLine
-              ? line.text.slice(0, currentChar)
-              : line.text;
-
-            return (
-              <div key={i} className="flex">
-                <span className="mr-4 w-5 text-right text-xs text-muted-foreground/50 select-none">
-                  {i + 1}
-                </span>
-                <span style={{ paddingLeft: `${line.indent * 1.5}rem` }}>
-                  <span className={line.color}>{displayText}</span>
-                  {isCurrentLine && showCursor && (
-                    <span className="inline-block h-[1.1em] w-[2px] -mb-[2px] bg-blue-400 align-middle" />
-                  )}
-                </span>
-              </div>
-            );
-          })}
-          {visibleLines >= codeLines.length && showCursor && (
-            <div className="flex">
-              <span className="mr-4 w-5 text-right text-xs text-muted-foreground/50 select-none">
-                {codeLines.length + 1}
-              </span>
-              <span className="inline-block h-[1.1em] w-[2px] bg-blue-400" />
-            </div>
-          )}
-        </div>
-      </div>
-
-      <style jsx>{`
-        @keyframes gradientShift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-      `}</style>
-    </motion.div>
-  );
-}
-
-// ─────────────────────────────────────────────
-// Tech Stack Pills
-// ─────────────────────────────────────────────
-
-const techPills = [
-  "React",
-  "Next.js",
-  "TypeScript",
-  "AI",
-  "Node.js",
-  "Flutter",
-  "Supabase",
-  "TailwindCSS",
-];
-
-const pillPositions = [
-  "top-0 -right-2 lg:-right-6",
-  "top-14 -right-8 lg:-right-14",
-  "-bottom-2 -right-4 lg:-right-10",
-  "-bottom-10 right-8 lg:right-4",
-  "-top-6 left-6 lg:left-2",
-  "top-10 -left-6 lg:-left-12",
-  "bottom-10 -left-4 lg:-left-10",
-  "-bottom-8 left-10 lg:left-8",
-];
-
-function TechPills() {
-  return (
-    <motion.div
-      variants={staggerFast}
-      initial="hidden"
-      animate="visible"
-      className="pointer-events-none absolute inset-0"
-    >
-      {techPills.map((pill, i) => (
-        <motion.span
-          key={pill}
-          variants={pillFloat}
-          className={`absolute hidden lg:inline-flex items-center rounded-full border border-white/10 bg-white/60 px-3 py-1 text-xs font-medium text-foreground/80 shadow-lg backdrop-blur-md dark:bg-white/5 dark:text-foreground/70 ${pillPositions[i] || ""}`}
-          style={{
-            animation: `pillBob ${3 + (i % 3)}s ease-in-out ${i * 0.4}s infinite alternate`,
-          }}
-        >
-          {pill}
-        </motion.span>
-      ))}
-      <style jsx>{`
-        @keyframes pillBob {
-          0% { transform: translateY(0px); }
-          100% { transform: translateY(-12px); }
-        }
-      `}</style>
-    </motion.div>
-  );
-}
-
-// ─────────────────────────────────────────────
-// Availability Badge
-// ─────────────────────────────────────────────
-
-function AvailabilityBadge() {
-  return (
-    <motion.div variants={blurIn} className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 px-4 py-1.5 text-sm backdrop-blur-sm dark:border-emerald-500/15 dark:bg-emerald-500/10">
-      <span className="relative flex h-2.5 w-2.5">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
-      </span>
-      <span className="text-emerald-700 dark:text-emerald-400 font-medium">
-        Available for work
-      </span>
-    </motion.div>
-  );
-}
-
-// ─────────────────────────────────────────────
-// Hero Section
-// ─────────────────────────────────────────────
+import { useEffect } from "react";
+import { motion, useScroll, useTransform, useMotionValue, useMotionTemplate } from "framer-motion";
+import { socialLinks } from "@/lib/constants";
 
 export default function HeroSection() {
+  // Layer 2 & 4: Mouse tracking for Spotlight & Glass Parallax
+  const mouseX = useMotionValue(0); // Normalized from -0.5 to 0.5
+  const mouseY = useMotionValue(0);
+  const spotlightX = useMotionValue(0); // Raw clientX
+  const spotlightY = useMotionValue(0); // Raw clientY
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set((e.clientX / window.innerWidth) - 0.5);
+      mouseY.set((e.clientY / window.innerHeight) - 0.5);
+      spotlightX.set(e.clientX);
+      spotlightY.set(e.clientY);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY, spotlightX, spotlightY]);
+
+  // Spotlight background template
+  const spotlightBg = useMotionTemplate`radial-gradient(800px circle at ${spotlightX}px ${spotlightY}px, rgba(120, 119, 198, 0.03), transparent 80%)`;
+
+  // Layer 4: Parallax translations for individual cards
+  const xA = useTransform(mouseX, [-0.5, 0.5], [-10, 10]);
+  const yA = useTransform(mouseY, [-0.5, 0.5], [-10, 10]);
+
+  const xB = useTransform(mouseX, [-0.5, 0.5], [-18, 18]);
+  const yB = useTransform(mouseY, [-0.5, 0.5], [-18, 18]);
+
+  const xC = useTransform(mouseX, [-0.5, 0.5], [-6, 6]);
+  const yC = useTransform(mouseY, [-0.5, 0.5], [-6, 6]);
+
+  // Layer 5: Fade scroll cue out on scroll
+  const { scrollY } = useScroll();
+  const scrollCueOpacity = useTransform(scrollY, [0, 100], [1, 0]);
+
+  // Social Links mapping
+  const githubUrl = socialLinks.find((s) => s.label === "GitHub")?.href || "https://github.com/jainam-15/";
+
   return (
     <section
       id="hero"
-      className="relative flex min-h-svh items-center overflow-hidden"
+      className="relative flex min-h-screen items-center justify-center overflow-hidden py-24 sm:py-32 bg-background text-foreground"
     >
-      {/* ── Animated Mesh Gradient Background ── */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        {/* Primary gradient blobs */}
+      {/* Layer 1 — Atmospheric Void */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        {/* Blue orb */}
         <div
-          className="absolute -left-1/4 -top-1/4 h-[800px] w-[800px] rounded-full opacity-20 dark:opacity-30"
+          className="absolute -left-[10%] -top-[10%] h-[700px] w-[700px] rounded-full blur-[200px] opacity-[0.15] dark:opacity-[0.4]"
           style={{
-            background:
-              "radial-gradient(circle, #3B82F6 0%, transparent 70%)",
-            animation: "meshMove1 20s ease-in-out infinite",
+            background: "radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%)",
+            animation: "meshDrift1 28s ease-in-out infinite alternate",
           }}
         />
+        {/* Purple orb */}
         <div
-          className="absolute -right-1/4 top-1/4 h-[600px] w-[600px] rounded-full opacity-15 dark:opacity-25"
+          className="absolute -right-[10%] -bottom-[10%] h-[600px] w-[600px] rounded-full blur-[200px] opacity-[0.1] dark:opacity-[0.3]"
           style={{
-            background:
-              "radial-gradient(circle, #8B5CF6 0%, transparent 70%)",
-            animation: "meshMove2 25s ease-in-out infinite",
+            background: "radial-gradient(circle, rgba(139,92,246,0.04) 0%, transparent 70%)",
+            animation: "meshDrift2 32s ease-in-out infinite alternate",
           }}
         />
-        <div
-          className="absolute bottom-0 left-1/3 h-[700px] w-[700px] rounded-full opacity-10 dark:opacity-20"
-          style={{
-            background:
-              "radial-gradient(circle, #6366F1 0%, transparent 70%)",
-            animation: "meshMove3 22s ease-in-out infinite",
-          }}
-        />
-        {/* Noise grain overlay */}
-        <div className="absolute inset-0 bg-background/60 dark:bg-background/40" />
       </div>
 
-      {/* ── Mouse Spotlight ── */}
-      <MouseSpotlight />
+      {/* Layer 2 — Mouse Spotlight */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ background: spotlightBg }}
+      />
 
-      {/* ── Floating Particles ── */}
-      <FloatingParticles />
+      {/* Core Layout */}
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-8">
+        <div className="grid items-center gap-16 lg:grid-cols-12 lg:gap-8">
+          
+          {/* Layer 3 — Core Typography & Content (Left, 7 columns) */}
+          <div className="flex flex-col items-start text-left lg:col-span-7">
+            
+            {/* 1. Availability Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="inline-flex items-center gap-2 border border-emerald-500/15 bg-emerald-500/5 rounded-full px-4 py-1.5 text-[11px] font-medium tracking-wide uppercase text-emerald-600 dark:text-emerald-400"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+              <span>Available for projects</span>
+            </motion.div>
 
-      {/* ── Mesh animation keyframes ── */}
-      <style jsx>{`
-        @keyframes meshMove1 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(80px, 60px) scale(1.1); }
-          66% { transform: translate(-40px, 30px) scale(0.95); }
-        }
-        @keyframes meshMove2 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(-60px, -40px) scale(1.05); }
-          66% { transform: translate(50px, -20px) scale(1.1); }
-        }
-        @keyframes meshMove3 {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(40px, -60px) scale(1.08); }
-          66% { transform: translate(-30px, 40px) scale(0.92); }
-        }
-      `}</style>
-
-      {/* ── Main Content ── */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 py-20 lg:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* ── Left Side ── */}
-          <motion.div
-            variants={heroContainer}
-            initial="hidden"
-            animate="visible"
-            className="flex flex-col items-start"
-          >
-            {/* Availability Badge */}
-            <AvailabilityBadge />
-
-            {/* Heading */}
-            <div className="mt-8 space-y-2">
-              <motion.h1
-                variants={lineReveal}
-                className="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl"
-              >
-                <span className="inline-block bg-gradient-to-r from-blue-500 via-violet-500 to-purple-500 bg-clip-text text-transparent">
+            {/* 2. Main Heading */}
+            <div className="mt-8 space-y-2 select-none">
+              <h1 className="overflow-hidden">
+                <motion.span
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="block text-[clamp(2.8rem,7.5vw,6.5rem)] font-extrabold tracking-[-0.04em] leading-[0.9] text-foreground"
+                >
                   AI-Powered
-                </span>
-              </motion.h1>
-              <motion.h1
-                variants={lineReveal}
-                className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl"
-              >
-                Full-Stack Engineer
-              </motion.h1>
+                </motion.span>
+              </h1>
+              <h1 className="overflow-hidden">
+                <motion.span
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.62, ease: [0.16, 1, 0.3, 1] }}
+                  className="block text-[clamp(2.8rem,7.5vw,6.5rem)] font-extrabold tracking-[-0.04em] leading-[0.9] text-foreground"
+                >
+                  Full-Stack
+                </motion.span>
+              </h1>
+              <h1 className="overflow-hidden">
+                <motion.span
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.9, delay: 0.74, ease: [0.16, 1, 0.3, 1] }}
+                  className="block text-[clamp(2.8rem,7.5vw,6.5rem)] font-extrabold tracking-[-0.04em] leading-[0.9] text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400"
+                >
+                  Engineer.
+                </motion.span>
+              </h1>
             </div>
 
-            {/* Subheading */}
+            {/* 3. Supporting Statement */}
             <motion.p
-              variants={fadeInUp}
-              className="mt-6 max-w-lg text-lg leading-relaxed text-muted-foreground lg:text-xl"
+              initial={{ opacity: 0, filter: "blur(6px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ duration: 1.2, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-6 max-w-[480px] text-lg leading-relaxed text-muted-foreground/60 font-sans"
             >
-              {siteConfig.description}
+              Engineering premium AI-powered products, scalable systems, and digital experiences that refuse to feel average.
             </motion.p>
 
-            {/* CTA Buttons */}
+            {/* 4. CTA Row */}
             <motion.div
-              variants={staggerContainer}
-              className="mt-10 flex flex-wrap items-center gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.0, delay: 1.4, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-10 flex flex-wrap items-center gap-3 w-full"
             >
-              {/* View Projects */}
               <motion.a
-                variants={buttonReveal}
                 href="#projects"
-                className="group relative inline-flex h-11 items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 px-6 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/30 hover:brightness-110 active:scale-[0.98]"
+                whileHover={{ y: -1, transition: { duration: 0.2 } }}
+                className="rounded-full px-7 py-3 bg-white text-black text-sm font-medium hover:bg-neutral-100 transition-colors shadow-lg active:scale-[0.98]"
               >
-                <span className="relative z-10 flex items-center gap-2">
-                  View Projects
-                  <svg
-                    className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </span>
+                Explore Work
               </motion.a>
 
-              {/* Book a Call */}
               <motion.a
-                variants={buttonReveal}
-                href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-background/50 px-6 text-sm font-semibold text-foreground backdrop-blur-sm transition-all duration-300 hover:border-foreground/20 hover:bg-accent active:scale-[0.98]"
+                href="#contact"
+                whileHover={{ y: -1, transition: { duration: 0.2 } }}
+                className="rounded-full px-6 py-3 border border-white/12 text-foreground/70 text-sm font-medium hover:border-white/25 hover:text-foreground transition-colors active:scale-[0.98]"
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                  />
-                </svg>
                 Book a Call
               </motion.a>
 
-              {/* WhatsApp */}
               <motion.a
-                variants={buttonReveal}
-                href="https://wa.me/919426180574"
+                href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl px-6 text-sm font-semibold text-emerald-600 transition-all duration-300 hover:bg-emerald-500/10 active:scale-[0.98] dark:text-emerald-400"
+                aria-label="GitHub Profile"
+                whileHover={{ y: -1, transition: { duration: 0.2 } }}
+                className="w-11 h-11 rounded-full border border-white/8 flex items-center justify-center text-foreground/60 hover:border-white/20 hover:text-foreground transition-colors active:scale-[0.98]"
               >
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.137 20.162 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
                 </svg>
-                WhatsApp Me
               </motion.a>
             </motion.div>
-          </motion.div>
 
-          {/* ── Right Side: Code Card ── */}
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: { delayChildren: 0.8, staggerChildren: 0.15 },
-              },
-            }}
-            className="relative flex items-center justify-center"
-          >
-            {/* Ambient glow behind card */}
-            <div className="absolute h-72 w-72 rounded-full bg-blue-500/10 blur-[100px] dark:bg-blue-500/20" />
-            <div className="absolute h-52 w-52 translate-x-20 translate-y-10 rounded-full bg-purple-500/10 blur-[80px] dark:bg-purple-500/15" />
+            {/* 5. Credential Line */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.0, delay: 1.8 }}
+              className="mt-8 text-[11px] tracking-wider text-muted-foreground/25 font-sans font-semibold uppercase"
+            >
+              Next.js &middot; TypeScript &middot; AI Systems &middot; 2 SaaS Products &middot; 7+ Projects
+            </motion.div>
 
-            <div className="relative w-full max-w-md">
-              <TechPills />
-              <TypingCodeCard />
-            </div>
-          </motion.div>
-        </div>
+          </div>
 
-        {/* ── Scroll Indicator ── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.5, duration: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-xs tracking-widest text-muted-foreground/60 uppercase">
-              Scroll
-            </span>
-            <div className="flex h-8 w-5 items-start justify-center rounded-full border border-muted-foreground/20 p-1">
+          {/* Layer 4 — Right-Side Glass Composition (Desktop Only, 5 columns) */}
+          <div className="relative lg:col-span-5 hidden lg:flex items-center justify-center min-h-[450px]">
+            {/* Soft background glow specifically behind the glass cards */}
+            <div className="absolute h-80 w-80 rounded-full bg-blue-500/5 blur-[120px] dark:bg-blue-500/10 pointer-events-none" />
+            <div className="absolute h-80 w-80 rounded-full bg-purple-500/5 blur-[120px] dark:bg-purple-500/10 pointer-events-none translate-x-12 translate-y-12" />
+
+            <div className="relative w-full max-w-[420px] h-[400px]">
+              
+              {/* Card A — Code Philosophy (largest, primary z-layer) */}
               <motion.div
-                className="h-1.5 w-1.5 rounded-full bg-muted-foreground/50"
-                animate={{ y: [0, 8, 0] }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
+                style={{ x: xA, y: yA }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                initial={{ opacity: 0, scale: 0.95, rotate: 1.5 }}
+                animate={{ opacity: 1, scale: 1, rotate: 1.5 }}
+                transition={{ duration: 1.2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute z-10 left-10 top-12 w-[320px] bg-white/[0.03] dark:bg-white/[0.03] backdrop-blur-2xl border border-white/[0.06] rounded-2xl shadow-2xl p-5 cursor-default select-none"
+              >
+                {/* Clean header row */}
+                <div className="flex justify-between items-center border-b border-white/[0.05] pb-3 mb-3">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-red-500/60" />
+                    <div className="w-2 h-2 rounded-full bg-amber-500/60" />
+                    <div className="w-2 h-2 rounded-full bg-green-500/60" />
+                  </div>
+                  <span className="font-mono text-[10px] text-muted-foreground/45 tracking-wide">vision.ts</span>
+                </div>
+                
+                {/* Monospace Code content */}
+                <pre className="font-mono text-[11px] leading-relaxed text-muted-foreground/80 overflow-x-auto select-none">
+                  <code>
+                    <span className="text-blue-400/80">async function</span> <span className="text-indigo-300">buildProduct</span>(<span className="text-orange-300/80">vision</span>) &#123;{"\n"}
+                    {"  "}<span className="text-blue-400/80">const</span> design = <span className="text-blue-400/80">await</span> <span className="text-indigo-300">craft</span>(vision, &#123;{"\n"}
+                    {"    "}quality: <span className="text-emerald-400/80">&quot;obsessive&quot;</span>,{"\n"}
+                    {"    "}stack: [<span className="text-emerald-400/80">&quot;next&quot;</span>, <span className="text-emerald-400/80">&quot;typescript&quot;</span>, <span className="text-emerald-400/80">&quot;ai&quot;</span>]{"\n"}
+                    {"  "}&#125;);{"\n"}
+                    {"  "}{"\n"}
+                    {"  "}<span className="text-blue-400/80">return</span> <span className="text-indigo-300">ship</span>(design); <span className="text-muted-foreground/30">{"// never average"}</span>{"\n"}
+                    &#125;
+                  </code>
+                </pre>
+              </motion.div>
+
+              {/* Card B — Capabilities (medium, overlapping Card A bottom-left) */}
+              <motion.div
+                style={{ x: xB, y: yB }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                initial={{ opacity: 0, x: -30, rotate: -1 }}
+                animate={{ opacity: 1, x: 0, rotate: -1 }}
+                transition={{ duration: 1.2, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute z-20 left-[-20px] bottom-8 w-[240px] bg-white/[0.03] dark:bg-white/[0.03] backdrop-blur-2xl border border-white/[0.06] rounded-xl shadow-2xl p-4 cursor-default select-none"
+              >
+                <div className="flex flex-col gap-3">
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground/30 font-medium font-sans">Capabilities</div>
+                  <ul className="space-y-2.5">
+                    {[
+                      "AI-Powered Products",
+                      "Scalable SaaS Systems",
+                      "Premium User Experiences",
+                      "Cross-Platform Apps"
+                    ].map((item, idx) => (
+                      <li key={idx} className="flex items-center gap-2 text-[12px] text-muted-foreground/70 font-sans font-medium">
+                        <span className="text-emerald-400/80 font-bold select-none">✓</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+
+              {/* Card C — Status (smallest, top-right overlap) */}
+              <motion.div
+                style={{ x: xC, y: yC }}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                initial={{ opacity: 0, y: -20, rotate: 2 }}
+                animate={{ opacity: 1, y: 0, rotate: 2 }}
+                transition={{ duration: 1.2, delay: 1.3, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute z-0 right-[-10px] top-4 w-[180px] bg-white/[0.03] dark:bg-white/[0.03] backdrop-blur-2xl border border-white/[0.06] rounded-xl shadow-2xl p-4 cursor-default select-none"
+              >
+                <div className="space-y-2.5">
+                  <div className="flex justify-between items-center text-[11px] font-sans">
+                    <span className="text-muted-foreground/40 font-medium font-sans">Projects</span>
+                    <span className="font-mono text-foreground/80 font-bold">7+</span>
+                  </div>
+                  <div className="flex justify-between items-center text-[11px] font-sans">
+                    <span className="text-muted-foreground/40 font-medium font-sans">SaaS Products</span>
+                    <span className="font-mono text-foreground/80 font-bold">2</span>
+                  </div>
+                  <div className="flex justify-between items-center text-[11px] font-sans">
+                    <span className="text-muted-foreground/40 font-medium font-sans">Status</span>
+                    <span className="flex items-center gap-1.5 font-sans font-semibold text-emerald-500/80">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Active
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+
             </div>
           </div>
-        </motion.div>
+
+        </div>
       </div>
+
+      {/* Layer 5 — Scroll Cue */}
+      <motion.div
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center select-none pointer-events-none"
+        style={{ opacity: scrollCueOpacity }}
+      >
+        <div
+          className="w-[1px] h-6 bg-foreground/30 origin-top"
+          style={{
+            animation: "scrollPulse 2s cubic-bezier(0.16, 1, 0.3, 1) infinite",
+          }}
+        />
+      </motion.div>
     </section>
   );
 }
