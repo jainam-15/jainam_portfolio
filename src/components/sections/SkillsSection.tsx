@@ -2,140 +2,99 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import {
-  Layout,
-  Server,
-  Brain,
-  Smartphone,
-  Database,
-  Palette,
-} from "lucide-react";
-import { skills } from "@/lib/constants";
-import { staggerContainer, fadeInUp, staggerFast } from "@/lib/animations";
-import { cn } from "@/lib/utils";
-
-const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
-  layout: Layout,
-  server: Server,
-  brain: Brain,
-  smartphone: Smartphone,
-  database: Database,
-  palette: Palette,
-};
-
-function SkillPill({ name }: { name: string }) {
-  return (
-    <motion.span
-      variants={fadeInUp}
-      whileHover={{ y: -1 }}
-      className={cn(
-        "inline-flex cursor-default select-none items-center rounded-full px-4 py-1.5 text-xs font-medium",
-        "bg-white/[0.04] dark:bg-white/[0.02] text-foreground/80 border border-border/60",
-        "transition-colors duration-200 hover:bg-foreground/[0.04] hover:text-foreground"
-      )}
-    >
-      {name}
-    </motion.span>
-  );
-}
-
-interface CategoryCardProps {
-  category: string;
-  icon: string;
-  items: readonly string[];
-}
-
-function CategoryCard({ category, icon, items }: CategoryCardProps) {
-  const Icon = iconMap[icon] ?? Layout;
-
-  return (
-    <motion.div
-      variants={fadeInUp}
-      whileHover={{ y: -2, transition: { duration: 0.2 } }}
-      className={cn(
-        "group relative overflow-hidden rounded-2xl border border-white/[0.04] p-8",
-        "bg-black/[0.15] dark:bg-white/[0.01] backdrop-blur-md",
-        "transition-all duration-300 ease-out"
-      )}
-    >
-      <div className="relative z-10 flex flex-col h-full justify-between">
-        <div>
-          {/* Module Title */}
-          <div className="mb-6 flex items-center gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-card/40 transition-colors duration-300">
-              <Icon className="h-5 w-5 text-foreground/80" />
-            </div>
-            <h3 className="text-base font-bold tracking-tight text-foreground">
-              {category}
-            </h3>
-          </div>
-
-          {/* Skill pills */}
-          <motion.div
-            variants={staggerFast}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            className="flex flex-wrap gap-2"
-          >
-            {items.map((skill) => (
-              <SkillPill key={skill} name={skill} />
-            ))}
-          </motion.div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 export default function SkillsSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const containerRef = useRef<HTMLElement>(null);
+  const isInView = useInView(containerRef, { once: true, margin: "-100px" });
+
+  const pillars = [
+    {
+      title: "System Architecture",
+      subtitle: "Relentless Backends & Orchestration",
+      description: "Engineering scalable foundations designed for maximum throughput, persistent state, and sub-millisecond response latency. We prioritize architectural integrity over quick hacks.",
+      skills: ["Next.js & App Router", "Node.js (Express & APIs)", "Supabase & Postgres", "GraphQL & REST APIs", "Prisma & SQL Systems", "Realtime WebSockets"],
+    },
+    {
+      title: "Interfaces",
+      subtitle: "Visual Luxury & Kinetic Feel",
+      description: "Crafting fluid, high-fidelity user experiences that respond to human intent. Heavily inspired by Apple's restraint, Stripe's layouts, and Framer's interactive precision.",
+      skills: ["React & Next.js Ecosystem", "TypeScript & Clean Logic", "TailwindCSS & Fluid Layouts", "Framer Motion & GSAP", "Flutter & Native Android (Kotlin)", "Figma UI/UX & Design Systems"],
+    },
+    {
+      title: "Intelligence",
+      subtitle: "Cognitive Automations & Agents",
+      description: "Integrating intelligent language models directly into the pipeline. Designing autonomous agent systems and semantic workflows that run ahead of human operations.",
+      skills: ["OpenAI & LLM Integrations", "AI Agents & Tool Calling", "Retrieval-Augmented Generation (RAG)", "Prompt Engineering & Evaluation", "Vector Databases & Embeddings", "Intelligent Workflows"],
+    },
+  ];
 
   return (
     <section
       id="skills"
-      ref={sectionRef}
-      className="relative w-full overflow-hidden py-32 md:py-48 border-t border-border bg-background"
+      ref={containerRef}
+      className="relative w-full overflow-hidden bg-background border-t border-border py-32 md:py-48 select-none"
     >
-      {/* Ambient glow */}
-      <div className="pointer-events-none absolute right-0 top-1/2 -z-10 h-[500px] w-[700px] -translate-y-1/2 opacity-15 blur-[120px]">
-        <div className="h-full w-full rounded-full bg-gradient-to-bl from-purple-600/10 via-blue-600/5 to-transparent" />
+      {/* Light atmospheric glow */}
+      <div className="pointer-events-none absolute left-1/3 top-1/2 -z-10 h-[500px] w-[500px] -translate-y-1/2 opacity-[0.02] blur-[120px]">
+        <div className="h-full w-full rounded-full bg-blue-500" />
       </div>
 
       <div className="mx-auto max-w-6xl px-6">
         
-        {/* Section Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-20 text-center"
-        >
-          <div className="text-[10px] tracking-[0.2em] text-muted-foreground/50 font-bold uppercase mb-3">
+        {/* Section Header */}
+        <div className="mb-24 md:mb-32">
+          <span className="text-[10px] tracking-[0.2em] text-muted-foreground/40 font-bold uppercase block mb-3">
             Capabilities
-          </div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl md:text-5xl uppercase">
-            Technical Stack
+          </span>
+          <h2 className="text-[clamp(2.5rem,6vw,4.5rem)] font-extrabold tracking-[-0.05em] leading-[0.9] text-foreground uppercase">
+            The Competencies.
           </h2>
-        </motion.div>
+        </div>
 
-        {/* Skills grid */}
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-        >
-          {skills.map((skill) => (
-            <CategoryCard
-              key={skill.category}
-              category={skill.category}
-              icon={skill.icon}
-              items={skill.items}
-            />
+        {/* Editorial Pillars Columns */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-12 lg:gap-16">
+          {pillars.map((pillar, index) => (
+            <motion.div
+              key={pillar.title}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 1.5, delay: index * 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col gap-6 text-left"
+            >
+              {/* Pillar Title */}
+              <div className="flex flex-col gap-1.5">
+                <span className="text-[9px] font-mono tracking-[0.3em] text-muted-foreground/30 uppercase">
+                  {"// Pillar 0"}{index + 1}
+                </span>
+                <h3 className="text-xl font-bold tracking-tight text-foreground uppercase">
+                  {pillar.title}
+                </h3>
+                <span className="text-xs text-muted-foreground/50 font-medium">
+                  {pillar.subtitle}
+                </span>
+              </div>
+
+              {/* Editorial Description */}
+              <p className="text-sm leading-relaxed text-muted-foreground/70 font-normal">
+                {pillar.description}
+              </p>
+
+              {/* Vertical Divider */}
+              <div className="w-full h-px bg-white/[0.04]" />
+
+              {/* Technology Stack List */}
+              <ul className="flex flex-col gap-3 font-mono text-xs text-muted-foreground/60">
+                {pillar.skills.map((skill) => (
+                  <li key={skill} className="flex items-center gap-3 group transition-colors duration-300 hover:text-foreground">
+                    <span className="w-1 h-1 rounded-full bg-white/20 transition-all duration-300 group-hover:bg-foreground group-hover:scale-125" />
+                    <span>{skill}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
           ))}
-        </motion.div>
+        </div>
+
       </div>
     </section>
   );
