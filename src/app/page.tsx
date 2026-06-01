@@ -1,31 +1,23 @@
-"use client";
-
-import LoadingScreen from "@/components/layout/LoadingScreen";
-import HeroSection from "@/components/sections/HeroSection";
-import ManifestoSection from "@/components/sections/ManifestoSection";
-import AboutSection from "@/components/sections/AboutSection";
-import SkillsSection from "@/components/sections/SkillsSection";
-import ProjectsSection from "@/components/sections/ProjectsSection";
-import ExperienceSection from "@/components/sections/ExperienceSection";
-import ContactSection from "@/components/sections/ContactSection";
+import { Hero } from "@/components/hero";
+import { About } from "@/components/about";
+import { Skills } from "@/components/skills";
+import { Projects } from "@/components/projects";
+import { Experience } from "@/components/experience";
+import { Process } from "@/components/process";
+import { Contact } from "@/components/contact";
+import { Footer } from "@/components/footer";
 
 export default function Home() {
   return (
-    <>
-      {/* Premium Loader */}
-      <LoadingScreen />
-
-      {/* Main Page Layout */}
-      <div className="relative min-h-screen w-full overflow-hidden bg-background font-sans text-foreground">
-        {/* Sections in cinematic order */}
-        <HeroSection />
-        <ManifestoSection />
-        <AboutSection />
-        <ProjectsSection />
-        <SkillsSection />
-        <ExperienceSection />
-        <ContactSection />
-      </div>
-    </>
+    <main className="flex min-h-screen flex-col">
+      <Hero />
+      <About />
+      <Skills />
+      <Projects />
+      <Experience />
+      <Process />
+      <Contact />
+      <Footer />
+    </main>
   );
 }
