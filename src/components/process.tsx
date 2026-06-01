@@ -1,86 +1,113 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Search, PenTool, Code2, Rocket } from "lucide-react";
 
-const processes = [
+const pipeline = [
   {
     icon: Search,
-    title: "Research & Architecture",
-    description: "Deep-diving into business logic, user psychology, and laying a scalable cloud and database foundation."
+    phase: "Discovery",
+    title: "Problem Deconstruction",
+    description: "Before writing a single line of code, we define the exact business problem, identify bottlenecks, and map the user psychology required for adoption."
   },
   {
     icon: PenTool,
-    title: "Cinematic Design",
-    description: "Crafting fluid, Apple-tier UI/UX using high-end design systems, typography, and micro-interactions."
+    phase: "Architecture",
+    title: "Systems & UI Design",
+    description: "Designing the data models, cloud infrastructure, and a cinematic, Apple-tier user interface that builds immediate trust."
   },
   {
     icon: Code2,
+    phase: "Development",
     title: "AI-Assisted Build",
-    description: "Writing high-performance, strictly typed code accelerated by modern AI workflows for maximum quality and speed."
+    description: "Executing the architecture rapidly using modern AI workflows. Strictly typed, highly scalable, and optimized for performance from day one."
   },
   {
     icon: Rocket,
-    title: "Deploy & Scale",
-    description: "Optimizing for 60fps animations, robust SEO, and scalable infrastructure before global launch."
+    phase: "Deployment",
+    title: "Launch & Scale",
+    description: "Rigorous testing, SEO optimization, and global deployment. Ensuring the product can handle scale the moment it hits the market."
   }
 ];
 
 export function Process() {
   const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"],
+  });
+
+  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
-    <section className="relative py-32 bg-background border-t border-border/50 overflow-hidden" ref={containerRef}>
-      {/* Background Glow */}
-      <div className="absolute left-1/2 top-0 -translate-x-1/2 w-full max-w-2xl h-1/2 bg-foreground/5 blur-[120px] pointer-events-none rounded-b-full" />
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          viewport={{ once: true, margin: "-100px" }}
-          className="mb-24 text-center max-w-3xl mx-auto"
-        >
-          <span className="text-xs font-mono tracking-widest uppercase text-muted-foreground mb-6 block">Execution</span>
+    <section ref={containerRef} className="relative py-32 bg-background border-t border-border/50 overflow-hidden">
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl relative z-10">
+        
+        <div className="mb-24 text-center">
+          <span className="text-xs font-mono tracking-widest uppercase text-muted-foreground mb-6 block">Methodology</span>
           <h2 className="text-4xl md:text-5xl font-bold tracking-tighter leading-tight">
-            The <span className="text-foreground text-gradient">Methodology.</span>
+            From Idea to <span className="text-muted-foreground">Product.</span>
           </h2>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
-          {processes.map((proc, idx) => {
-            const Icon = proc.icon;
-            return (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.1 * idx, ease: [0.16, 1, 0.3, 1] }}
-                viewport={{ once: true, margin: "-100px" }}
-                className="group relative glass-card p-10 md:p-12 rounded-[2rem] hover-target overflow-hidden border border-border/50"
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-foreground/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                
-                <div className="relative z-10 flex flex-col h-full">
-                  <div className="w-16 h-16 rounded-2xl bg-background border border-border/50 flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform duration-500 ease-out">
-                    <Icon className="w-8 h-8 text-foreground" />
-                  </div>
-                  
-                  <h3 className="text-2xl font-bold mb-4 tracking-tight text-foreground">{proc.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed text-lg">
-                    {proc.description}
-                  </p>
-                  
-                  <div className="mt-8 text-foreground/20 font-mono text-5xl font-bold absolute bottom-8 right-8 group-hover:text-foreground/40 transition-colors duration-500">
-                    0{idx + 1}
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
         </div>
+
+        <div className="relative">
+          {/* Central Pipeline Line */}
+          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-foreground/10 md:-translate-x-1/2 rounded-full overflow-hidden">
+            <motion.div 
+              className="absolute top-0 left-0 w-full bg-foreground shadow-[0_0_15px_rgba(255,255,255,0.8)]"
+              style={{ height: lineHeight }}
+            />
+          </div>
+
+          <div className="space-y-12 md:space-y-24">
+            {pipeline.map((step, idx) => {
+              const isEven = idx % 2 === 0;
+              const Icon = step.icon;
+              return (
+                <div key={idx} className={`relative flex flex-col md:flex-row items-start md:items-center justify-between w-full ${isEven ? 'md:flex-row-reverse' : ''}`}>
+                  
+                  {/* Pipeline Node */}
+                  <motion.div 
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5, ease: "backOut" }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="absolute left-8 md:left-1/2 w-12 h-12 rounded-full bg-background border-[3px] border-border/50 -translate-x-1/2 z-10 flex items-center justify-center shadow-xl"
+                  >
+                    <Icon className="w-5 h-5 text-foreground" />
+                  </motion.div>
+
+                  {/* Spacer */}
+                  <div className="hidden md:block md:w-[45%]" />
+
+                  {/* Content */}
+                  <motion.div 
+                    initial={{ opacity: 0, x: isEven ? 50 : -50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="w-full md:w-[45%] pl-20 md:pl-0"
+                  >
+                    <div className={`glass-card p-8 rounded-3xl border border-border/50 hover:bg-foreground/5 transition-colors relative overflow-hidden group ${isEven ? 'md:text-left' : 'md:text-right flex md:flex-col md:items-end'}`}>
+                      <div className="absolute inset-0 bg-gradient-to-br from-foreground/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                      <span className="text-xs font-mono tracking-widest uppercase text-muted-foreground mb-4 block border-b border-border/50 pb-2 inline-block">
+                        Phase 0{idx + 1} // {step.phase}
+                      </span>
+                      <h3 className="text-2xl font-bold tracking-tight text-foreground mb-3">{step.title}</h3>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
+                  </motion.div>
+
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
     </section>
   );

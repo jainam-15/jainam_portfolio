@@ -1,20 +1,24 @@
 import { Hero } from "@/components/hero";
-import { About } from "@/components/about";
+import { PersonalIdentity } from "@/components/personal-identity";
 import { Skills } from "@/components/skills";
 import { Projects } from "@/components/projects";
-import { Experience } from "@/components/experience";
+import { Metrics } from "@/components/metrics";
+import { Testimonials } from "@/components/testimonials";
+import { AiVisualization } from "@/components/ai-visualization";
 import { Process } from "@/components/process";
 import { Contact } from "@/components/contact";
 import { Footer } from "@/components/footer";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col">
+    <main className="flex min-h-screen flex-col bg-background">
       <Hero />
-      <About />
+      <PersonalIdentity />
       <Skills />
       <Projects />
-      <Experience />
+      <Metrics />
+      <Testimonials />
+      <AiVisualization />
       <Process />
       <Contact />
       <Footer />
