@@ -1,22 +1,40 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Code2, Database, BrainCircuit, Smartphone, Settings } from "lucide-react";
 
-const skillCategories = [
+const capabilities = [
   {
-    category: "Frontend",
-    skills: ["Next.js", "React", "TypeScript", "TailwindCSS", "Framer Motion"],
+    title: "AI Systems",
+    description: "Orchestrating agentic workflows and integrating state-of-the-art LLMs into production applications.",
+    icon: BrainCircuit,
+    colSpan: "lg:col-span-2",
   },
   {
-    category: "Backend",
-    skills: ["Node.js", "Express", "Supabase", "Firebase", "PostgreSQL"],
+    title: "SaaS Architecture",
+    description: "Designing scalable, secure, and multi-tenant systems capable of handling high traffic.",
+    icon: Database,
+    colSpan: "lg:col-span-1",
   },
   {
-    category: "Mobile & AI",
-    skills: ["Flutter", "Kotlin", "XML", "AI Workflows", "OpenAI API"],
+    title: "Mobile Products",
+    description: "Crafting cross-platform applications with seamless native performance and UI.",
+    icon: Smartphone,
+    colSpan: "lg:col-span-1",
   },
+  {
+    title: "Product Engineering",
+    description: "Delivering cinematic frontend experiences with rigorous attention to detail and interaction design.",
+    icon: Code2,
+    colSpan: "lg:col-span-2",
+  },
+  {
+    title: "Scalable Infrastructure",
+    description: "Automating deployments and optimizing performance for global scale.",
+    icon: Settings,
+    colSpan: "lg:col-span-3",
+  }
 ];
 
 export function Skills() {
@@ -24,48 +42,45 @@ export function Skills() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section className="relative py-32 overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8" ref={ref}>
-        <div className="text-center mb-20">
-          <motion.h2 
+    <section className="relative py-32 bg-background overflow-hidden border-t border-border/50">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl" ref={ref}>
+        <div className="text-center mb-24">
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.8 }}
-            className="text-4xl md:text-5xl font-bold tracking-tight"
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            Technical <span className="text-gradient">Arsenal</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto"
-          >
-            The tools and technologies I use to build scalable, high-performance, and premium digital experiences.
-          </motion.p>
+            <span className="text-xs font-mono tracking-widest uppercase text-muted-foreground mb-4 block">Capability Matrix</span>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tighter">
+              The <span className="text-foreground text-gradient">Architecture</span> of Scale.
+            </h2>
+          </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {skillCategories.map((category, idx) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {capabilities.map((cap, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.8, delay: 0.2 + idx * 0.2 }}
-              className="glass-card p-8 rounded-3xl relative overflow-hidden group hover-target"
+              transition={{ duration: 0.8, delay: 0.1 * idx, ease: [0.16, 1, 0.3, 1] }}
+              className={`group relative glass-card p-8 rounded-3xl overflow-hidden hover-target border border-border/50 ${cap.colSpan}`}
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-              <h3 className="text-2xl font-semibold mb-6 text-foreground/90">{category.category}</h3>
-              <div className="flex flex-wrap gap-3">
-                {category.skills.map((skill, sIdx) => (
-                  <motion.div
-                    key={sIdx}
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    className="px-4 py-2 rounded-full glass text-sm font-medium hover:bg-foreground/10 transition-colors cursor-default"
-                  >
-                    {skill}
-                  </motion.div>
-                ))}
+              <div className="absolute inset-0 bg-gradient-to-br from-foreground/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+              
+              <div className="relative z-10 h-full flex flex-col justify-between">
+                <div className="mb-12">
+                  <div className="w-12 h-12 rounded-xl bg-background border border-border/50 flex items-center justify-center mb-6 shadow-sm">
+                    <cap.icon className="w-6 h-6 text-foreground" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3 tracking-tight text-foreground">{cap.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed max-w-md">
+                    {cap.description}
+                  </p>
+                </div>
+                
+                {/* Visual anchor point */}
+                <div className="self-end w-2 h-2 rounded-full bg-border group-hover:bg-foreground/50 transition-colors duration-500" />
               </div>
             </motion.div>
           ))}

@@ -1,104 +1,91 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Cpu, Layers, Workflow } from "lucide-react";
 
 export function About() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
+  const features = [
+    {
+      icon: Cpu,
+      title: "AI Systems",
+      description: "Integrating intelligent agentic workflows and LLM infrastructure."
     },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-  };
+    {
+      icon: Layers,
+      title: "SaaS Architecture",
+      description: "Building resilient, multi-tenant scalable backends."
+    },
+    {
+      icon: Workflow,
+      title: "Premium UX",
+      description: "Engineering fluid, Apple-like cinematic interfaces."
+    }
+  ];
 
   return (
-    <section id="about" className="relative py-32 overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center"
-        >
+    <section id="about" className="relative py-32 bg-background overflow-hidden border-t border-border/50">
+      {/* Subtle background gradient */}
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-1/3 h-[500px] bg-foreground/5 blur-[150px] pointer-events-none" />
+
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8" ref={ref}>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8 items-start">
+          
           {/* Left: Text Content */}
-          <div>
-            <motion.div variants={itemVariants} className="mb-6">
-              <span className="text-primary font-medium tracking-wider uppercase text-sm">
-                About Me
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold mt-2 tracking-tight">
-                Engineering <span className="text-gradient">meets Product.</span>
+          <div className="lg:col-span-5 lg:sticky lg:top-32">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-6 leading-tight">
+                Architecting the intersection of <span className="text-foreground">AI</span> and <span className="text-foreground">Product.</span>
               </h2>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="space-y-6 text-lg text-muted-foreground">
-              <p>
-                I am not just a developer. I am a product builder obsessed with quality. My approach combines deep engineering expertise with strong product thinking and premium UX design.
-              </p>
-              <p>
-                Whether it&apos;s architecting a scalable backend, designing a cinematic frontend, or integrating AI-assisted workflows, I build systems that perform at the highest level.
-              </p>
-              <p>
-                I thrive in startup environments where innovation, speed, and quality intersect. I don&apos;t write code just to complete tasks; I build scalable products that leave a lasting impact.
-              </p>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="mt-10 grid grid-cols-2 gap-6">
-              <div className="glass-card p-6 rounded-2xl">
-                <h3 className="text-3xl font-bold text-foreground mb-2">100%</h3>
-                <p className="text-sm text-muted-foreground">Commitment to Quality & Details</p>
-              </div>
-              <div className="glass-card p-6 rounded-2xl">
-                <h3 className="text-3xl font-bold text-foreground mb-2">∞</h3>
-                <p className="text-sm text-muted-foreground">Passion for Scalable Architecture</p>
+              <div className="space-y-6 text-lg text-muted-foreground font-medium leading-relaxed">
+                <p>
+                  I don&apos;t just write code. I build businesses. My approach combines deep engineering expertise with strong product intuition, resulting in software that scales elegantly.
+                </p>
+                <p>
+                  From designing robust cloud architectures to engineering fluid cinematic frontends, I ensure every layer of the stack meets an uncompromising standard of quality.
+                </p>
               </div>
             </motion.div>
           </div>
 
-          {/* Right: Layered Visuals */}
-          <motion.div variants={itemVariants} className="relative h-[600px] w-full flex items-center justify-center">
-            {/* Background glowing shape */}
-            <div className="absolute inset-0 bg-blue-500/10 blur-[100px] rounded-full" />
-            
-            {/* Layered Glass Panels */}
-            <motion.div 
-              className="absolute w-64 h-80 glass-card rounded-3xl border border-white/10 z-10 -rotate-6 flex items-end p-6"
-              whileHover={{ rotate: 0, scale: 1.05, zIndex: 30 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
-              <p className="text-xl font-bold">AI Integration</p>
-            </motion.div>
-
-            <motion.div 
-              className="absolute w-72 h-96 bg-card/80 backdrop-blur-2xl rounded-3xl border border-white/10 z-20 rotate-3 shadow-2xl flex items-end p-6"
-              whileHover={{ rotate: 0, scale: 1.05, zIndex: 30 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
-              <p className="text-2xl font-bold text-gradient">Product Architecture</p>
-            </motion.div>
-
-            <motion.div 
-              className="absolute w-56 h-72 glass-card rounded-3xl border border-white/10 z-0 translate-x-32 -translate-y-10 rotate-12 flex items-end p-6"
-              whileHover={{ rotate: 0, scale: 1.05, zIndex: 30 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            >
-              <p className="text-lg font-bold">Premium UX</p>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+          {/* Right: Feature Cards */}
+          <div className="lg:col-span-6 lg:col-start-7 space-y-6">
+            {features.map((feature, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: 50 }}
+                animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+                transition={{ duration: 0.8, delay: 0.2 + idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="group relative"
+              >
+                {/* Glow effect on hover */}
+                <div className="absolute -inset-px bg-gradient-to-r from-foreground/10 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm" />
+                
+                <div className="relative glass-card p-8 rounded-2xl hover-target flex flex-col sm:flex-row gap-6 items-start">
+                  <div className="p-4 rounded-xl bg-background/50 border border-border/50 shadow-inner">
+                    <feature.icon className="w-6 h-6 text-foreground" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold text-foreground tracking-tight mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-muted-foreground text-lg leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
+        </div>
       </div>
     </section>
   );
