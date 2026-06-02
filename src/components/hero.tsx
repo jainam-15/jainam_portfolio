@@ -1,179 +1,103 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowDown, Terminal } from "lucide-react";
-import { Github, Linkedin } from "@/components/icons";
-import { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
+import { ArrowDown, BrainCircuit } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function Hero() {
-  const containerRef = useRef(null);
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 1000], [0, 300]);
-  const opacity = useTransform(scrollY, [0, 500], [1, 0]);
+  const [mounted, setMounted] = useState(false);
 
-  // Agent Network Nodes Generation
-  const [nodes, setNodes] = useState<{ id: number; x: number; y: number }[]>([]);
-  
   useEffect(() => {
-    // Generate static nodes for the background network once mounted
-    const newNodes = Array.from({ length: 15 }).map((_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-    }));
-    setNodes(newNodes);
+    setMounted(true);
   }, []);
 
   return (
-    <section ref={containerRef} id="home" className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-background">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-background">
       
-      {/* Background Interactive Agent Network */}
-      <motion.div style={{ y, opacity }} className="absolute inset-0 z-0 pointer-events-none opacity-30 dark:opacity-40">
-        <svg className="absolute w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="networkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="currentColor" stopOpacity="0.1" />
-              <stop offset="50%" stopColor="currentColor" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="currentColor" stopOpacity="0.1" />
-            </linearGradient>
-          </defs>
-          {nodes.map((node, i) => (
-            <g key={node.id}>
-              {/* Connecting Lines */}
-              {nodes.slice(i + 1, i + 4).map((target) => (
-                <motion.line
-                  key={`${node.id}-${target.id}`}
-                  x1={`${node.x}%`}
-                  y1={`${node.y}%`}
-                  x2={`${target.x}%`}
-                  y2={`${target.y}%`}
-                  stroke="url(#networkGradient)"
-                  strokeWidth="1"
-                  className="text-foreground"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ duration: 3, ease: "easeInOut", repeat: Infinity, repeatType: "reverse", delay: i * 0.1 }}
-                />
-              ))}
-              {/* Nodes */}
-              <motion.circle
-                cx={`${node.x}%`}
-                cy={`${node.y}%`}
-                r="3"
-                className="fill-foreground"
-                initial={{ scale: 0 }}
-                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
-              />
-              {/* Glow around nodes */}
-              <motion.circle
-                cx={`${node.x}%`}
-                cy={`${node.y}%`}
-                r="12"
-                className="fill-foreground/10"
-                animate={{ scale: [1, 2, 1], opacity: [0, 0.5, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: i * 0.2 }}
-              />
-            </g>
-          ))}
-        </svg>
-      </motion.div>
+      {/* Background Ambience */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.05)_0%,transparent_70%)]" />
 
-      {/* Ambient Depth Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-foreground/5 blur-[150px] pointer-events-none rounded-full" />
-
-      <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8 mt-12 flex flex-col items-center text-center">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col items-center justify-center h-full pt-20">
         
-        {/* Status Indicator */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+        {/* Signature Moment: The Neural Sphere */}
+        <div className="relative w-[300px] h-[300px] md:w-[450px] md:h-[450px] mb-12 flex items-center justify-center pointer-events-none">
+          {mounted && (
+            <>
+              {/* Outer Glow */}
+              <motion.div 
+                animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute inset-0 bg-foreground/10 rounded-full blur-[80px]"
+              />
+
+              {/* Orbital Ring 1 */}
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                className="absolute w-[90%] h-[90%] border border-dashed border-foreground/20 rounded-full"
+              />
+
+              {/* Orbital Ring 2 (Counter-rotate) */}
+              <motion.div 
+                animate={{ rotate: -360 }}
+                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                className="absolute w-[70%] h-[70%] border border-foreground/10 rounded-full flex items-center justify-center"
+              >
+                {/* Floating Nodes on Ring */}
+                {[0, 1, 2].map((i) => (
+                  <motion.div 
+                    key={`node-${i}`}
+                    className="absolute w-2 h-2 bg-foreground rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]"
+                    style={{ 
+                      top: '50%', 
+                      left: '50%', 
+                      marginTop: '-4px', 
+                      marginLeft: '-4px',
+                      transform: `rotate(${i * 120}deg) translateX(${150}px)` 
+                    }}
+                  />
+                ))}
+              </motion.div>
+
+              {/* The Core */}
+              <div className="relative z-10 w-32 h-32 md:w-40 md:h-40 rounded-full bg-background border border-border/50 flex items-center justify-center shadow-[0_0_50px_rgba(0,0,0,0.5)] overflow-hidden liquid-glass">
+                <motion.div 
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.8, 0.5] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute inset-0 bg-gradient-to-br from-foreground/20 to-transparent"
+                />
+                <BrainCircuit className="w-12 h-12 md:w-16 md:h-16 text-foreground relative z-20" />
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Massive Editorial Typography */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-border bg-background/50 backdrop-blur-xl mb-12 shadow-sm"
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+          className="text-center max-w-4xl mx-auto"
         >
-          <div className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-foreground opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-foreground"></span>
+          <span className="text-xs font-mono tracking-widest uppercase text-muted-foreground mb-8 block">Jainam — AI Product Builder</span>
+          
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-8 leading-[0.9]">
+            Engineering <br/>
+            <span className="text-foreground/40 text-gradient">Intelligence.</span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto font-medium leading-relaxed mb-12">
+            I don't just write code. I architect scalable systems, automate complex workflows, and build the future of software.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <a href="#about" className="group flex items-center justify-center gap-3 px-8 py-4 bg-foreground text-background font-bold rounded-full text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl pointer-events-auto">
+              Enter The Mind
+              <ArrowDown className="w-4 h-4 group-hover:translate-y-1 transition-transform" />
+            </a>
           </div>
-          <span className="text-xs font-mono tracking-widest uppercase text-foreground/80">Jainam Shah • AI Product Builder</span>
         </motion.div>
-
-        {/* Massive Editorial Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="text-6xl sm:text-7xl md:text-8xl lg:text-[8rem] font-bold tracking-tighter leading-[0.9] mb-8"
-        >
-          <span className="block text-foreground">Engineering</span>
-          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-foreground to-foreground/40">Intelligence.</span>
-        </motion.h1>
-
-        {/* Powerful Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          className="max-w-2xl text-xl md:text-2xl text-muted-foreground font-medium leading-relaxed mb-16"
-        >
-          I design, architect, and deploy world-class AI products. Bridging the gap between bleeding-edge technology and real human needs.
-        </motion.p>
-
-        {/* Social Proof / Trust anchors */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-          className="flex items-center gap-6"
-        >
-          <a
-            href="https://github.com/jainam-15/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group"
-          >
-            <Github className="w-5 h-5" />
-            <span>GitHub</span>
-          </a>
-          <div className="w-1 h-1 rounded-full bg-border" />
-          <a
-            href="https://www.linkedin.com/in/jainam-shah15/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group"
-          >
-            <Linkedin className="w-5 h-5" />
-            <span>LinkedIn</span>
-          </a>
-          <div className="w-1 h-1 rounded-full bg-border" />
-          <a
-            href="/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group"
-          >
-            <Terminal className="w-5 h-5" />
-            <span>Resume</span>
-          </a>
-        </motion.div>
-
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      >
-        <span className="text-[10px] font-mono tracking-widest uppercase text-muted-foreground">Scroll to explore</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <ArrowDown className="w-4 h-4 text-muted-foreground" />
-        </motion.div>
-      </motion.div>
 
     </section>
   );

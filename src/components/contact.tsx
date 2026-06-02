@@ -32,14 +32,14 @@ export function Contact() {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-100px" }}
           >
-            <span className="text-xs font-mono tracking-widest uppercase text-background/50 mb-8 block">The Next Step</span>
-            <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]">
-              Let's Build <br/>
-              <span className="text-background/40">Something</span> <br/>
-              Meaningful.
+            <span className="text-xs font-mono tracking-widest uppercase text-background/50 mb-8 block border-b border-background/20 pb-4 inline-block">The Final Sequence</span>
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]">
+              Building the <br/>
+              <span className="text-background/40">Future,</span> <br/>
+              One Product At A Time.
             </h2>
             <p className="text-xl md:text-2xl text-background/70 leading-relaxed font-medium">
-              If you have an idea worth building, a complex system to architect, or a team that needs a founder-minded engineer—I'm ready.
+              Have an idea worth turning into reality? Let's create something meaningful.
             </p>
           </motion.div>
 
