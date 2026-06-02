@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Send, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 
 export function Contact() {
@@ -12,104 +12,122 @@ export function Contact() {
     setStatus("loading");
     setTimeout(() => {
       setStatus("success");
-    }, 2000);
+    }, 1500);
   };
 
   return (
-    <section id="contact" className="relative py-40 bg-foreground border-t border-border/50 overflow-hidden text-background">
-      
-      {/* Intense Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1000px] h-full bg-background/5 rounded-full blur-[200px] pointer-events-none" />
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light pointer-events-none"></div>
+    <section
+      id="contact"
+      className="relative py-24 bg-foreground text-background border-t border-foreground overflow-hidden"
+    >
+      <div className="container mx-auto px-6 lg:px-8 max-w-5xl">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-5xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          
-          {/* Left: Emotional Close */}
+          {/* Left */}
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true, margin: "-80px" }}
+            className="lg:sticky lg:top-28"
           >
-            <span className="text-xs font-mono tracking-widest uppercase text-background/50 mb-8 block border-b border-background/20 pb-4 inline-block">The Final Sequence</span>
-            <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter mb-8 leading-[0.9]">
-              Building the <br/>
-              <span className="text-background/40">Future,</span> <br/>
-              One Product At A Time.
+            <p className="text-xs font-mono tracking-widest uppercase text-background/50 mb-8">
+              Let&apos;s talk
+            </p>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tighter leading-tight mb-6">
+              Have an idea?
+              <br />
+              <span className="text-background/40">Let&apos;s build it.</span>
             </h2>
-            <p className="text-xl md:text-2xl text-background/70 leading-relaxed font-medium">
-              Have an idea worth turning into reality? Let's create something meaningful.
+            <p className="text-base text-background/60 leading-relaxed">
+              I&apos;m open to interesting projects, collaborations, and conversations.
+              Reach out — I respond to every message.
             </p>
           </motion.div>
 
-          {/* Right: Stark, minimal form */}
+          {/* Right: Form */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            viewport={{ once: true, margin: "-100px" }}
-            className="p-8 md:p-12 rounded-[2rem] bg-background/5 backdrop-blur-2xl border border-background/10 relative overflow-hidden shadow-2xl"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            viewport={{ once: true, margin: "-80px" }}
           >
             {status === "success" ? (
-              <div className="text-center py-16 relative z-10">
-                <div className="w-20 h-20 bg-green-500/10 border border-green-500/20 text-green-500 rounded-full flex items-center justify-center mx-auto mb-8">
-                  <Send className="w-8 h-8 ml-1" />
-                </div>
-                <h3 className="text-4xl font-bold mb-4 tracking-tight text-background">Transmission Sent</h3>
-                <p className="text-background/60 text-lg">I will process your message and respond shortly.</p>
-                <button 
+              <div className="py-16 text-center">
+                <p className="text-2xl font-bold tracking-tight text-background mb-3">
+                  Message sent.
+                </p>
+                <p className="text-background/60 mb-8 text-sm">
+                  I&apos;ll get back to you shortly.
+                </p>
+                <button
                   onClick={() => setStatus("idle")}
-                  className="mt-10 px-8 py-4 rounded-full border border-background/20 bg-background/5 hover:bg-background/10 transition-colors text-sm font-semibold text-background"
+                  className="text-sm text-background/50 hover:text-background transition-colors underline underline-offset-4"
                 >
-                  Initiate another sequence
+                  Send another
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-3 group">
-                    <label htmlFor="name" className="text-xs font-mono tracking-widest uppercase text-background/50 group-focus-within:text-background transition-colors">Name</label>
-                    <input 
-                      type="text" 
-                      id="name" 
+              <form onSubmit={handleSubmit} className="space-y-7">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="name"
+                      className="text-[10px] font-mono tracking-widest uppercase text-background/40"
+                    >
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
                       required
-                      className="w-full bg-transparent border-b-2 border-background/20 px-0 py-3 focus:outline-none focus:border-background transition-colors placeholder:text-background/30 text-background text-lg"
+                      className="w-full bg-transparent border-b border-background/20 pb-2.5 focus:outline-none focus:border-background/60 transition-colors placeholder:text-background/25 text-background text-sm"
                       placeholder="John Doe"
                     />
                   </div>
-                  <div className="space-y-3 group">
-                    <label htmlFor="email" className="text-xs font-mono tracking-widest uppercase text-background/50 group-focus-within:text-background transition-colors">Email</label>
-                    <input 
-                      type="email" 
-                      id="email" 
+                  <div className="space-y-2">
+                    <label
+                      htmlFor="email"
+                      className="text-[10px] font-mono tracking-widest uppercase text-background/40"
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
                       required
-                      className="w-full bg-transparent border-b-2 border-background/20 px-0 py-3 focus:outline-none focus:border-background transition-colors placeholder:text-background/30 text-background text-lg"
+                      className="w-full bg-transparent border-b border-background/20 pb-2.5 focus:outline-none focus:border-background/60 transition-colors placeholder:text-background/25 text-background text-sm"
                       placeholder="john@example.com"
                     />
                   </div>
                 </div>
-                <div className="space-y-3 group">
-                  <label htmlFor="message" className="text-xs font-mono tracking-widest uppercase text-background/50 group-focus-within:text-background transition-colors">Message</label>
-                  <textarea 
-                    id="message" 
+                <div className="space-y-2">
+                  <label
+                    htmlFor="message"
+                    className="text-[10px] font-mono tracking-widest uppercase text-background/40"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
                     required
                     rows={4}
-                    className="w-full bg-transparent border-b-2 border-background/20 px-0 py-3 focus:outline-none focus:border-background transition-colors placeholder:text-background/30 text-background text-lg resize-none"
-                    placeholder="Tell me about your vision..."
+                    className="w-full bg-transparent border-b border-background/20 pb-2.5 focus:outline-none focus:border-background/60 transition-colors placeholder:text-background/25 text-background text-sm resize-none"
+                    placeholder="Tell me about your project..."
                   />
                 </div>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={status === "loading"}
-                  className="w-full bg-background text-foreground font-bold rounded-2xl px-8 py-5 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 shadow-xl mt-8 text-lg"
+                  className="w-full bg-background text-foreground font-semibold rounded-full px-6 py-3.5 flex items-center justify-center gap-2.5 hover:opacity-90 transition-opacity disabled:opacity-40 text-sm mt-2"
                 >
-                  {status === "loading" ? "Processing..." : "Initiate Contact"}
-                  <ArrowRight className="w-6 h-6" />
+                  {status === "loading" ? "Sending..." : "Send message"}
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </form>
             )}
           </motion.div>
+
         </div>
       </div>
     </section>

@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SmoothScroll } from "@/components/smooth-scroll";
-import { CustomCursor } from "@/components/custom-cursor";
 import { Navbar } from "@/components/navbar";
 
 const geistSans = Geist({
@@ -17,8 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jainam Shah | AI-Powered Full-Stack Engineer",
-  description: "I build scalable web apps, AI-powered systems, and premium digital experiences using modern development workflows.",
+  title: "Jainam Shah — Product Builder",
+  description:
+    "I build AI-powered products — from idea to shipped. Full-stack engineer, designer, and founder.",
 };
 
 export default function RootLayout({
@@ -40,7 +40,6 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SmoothScroll>
-            <CustomCursor />
             {children}
             <Navbar />
           </SmoothScroll>

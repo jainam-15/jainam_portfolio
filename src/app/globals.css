@@ -4,7 +4,6 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 
-  /* Colors mapped to standard tailwind names via theme block for utility class generation */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -33,47 +32,47 @@
 @layer base {
   :root {
     --background: #ffffff;
-    --foreground: #000000;
-    --card: #f9f9f9;
-    --card-foreground: #000000;
+    --foreground: #0a0a0a;
+    --card: #f7f7f7;
+    --card-foreground: #0a0a0a;
     --popover: #ffffff;
-    --popover-foreground: #000000;
-    --primary: #000000;
+    --popover-foreground: #0a0a0a;
+    --primary: #0a0a0a;
     --primary-foreground: #ffffff;
     --secondary: #f0f0f0;
-    --secondary-foreground: #000000;
+    --secondary-foreground: #0a0a0a;
     --muted: #f0f0f0;
-    --muted-foreground: #666666;
+    --muted-foreground: #737373;
     --accent: #f0f0f0;
-    --accent-foreground: #000000;
-    --destructive: #ff453a;
+    --accent-foreground: #0a0a0a;
+    --destructive: #ef4444;
     --destructive-foreground: #ffffff;
-    --border: #eaeaea;
-    --input: #eaeaea;
-    --ring: #000000;
-    --radius: 1rem;
+    --border: #e5e5e5;
+    --input: #e5e5e5;
+    --ring: #0a0a0a;
+    --radius: 0.75rem;
   }
 
   .dark {
-    --background: #000000;
-    --foreground: #ffffff;
-    --card: #080808;
-    --card-foreground: #ffffff;
-    --popover: #0a0a0a;
-    --popover-foreground: #ffffff;
-    --primary: #ffffff;
-    --primary-foreground: #000000;
-    --secondary: #111111;
-    --secondary-foreground: #ffffff;
-    --muted: #111111;
-    --muted-foreground: #888888;
-    --accent: #111111;
-    --accent-foreground: #ffffff;
-    --destructive: #ff453a;
-    --destructive-foreground: #ffffff;
-    --border: #1a1a1a;
-    --input: #1a1a1a;
-    --ring: #888888;
+    --background: #0a0a0a;
+    --foreground: #fafafa;
+    --card: #111111;
+    --card-foreground: #fafafa;
+    --popover: #111111;
+    --popover-foreground: #fafafa;
+    --primary: #fafafa;
+    --primary-foreground: #0a0a0a;
+    --secondary: #1a1a1a;
+    --secondary-foreground: #fafafa;
+    --muted: #1a1a1a;
+    --muted-foreground: #737373;
+    --accent: #1a1a1a;
+    --accent-foreground: #fafafa;
+    --destructive: #ef4444;
+    --destructive-foreground: #fafafa;
+    --border: #1f1f1f;
+    --input: #1f1f1f;
+    --ring: #737373;
   }
 }
 
@@ -81,6 +80,7 @@
   * {
     border-color: var(--border);
   }
+
   body {
     background-color: var(--background);
     color: var(--foreground);
@@ -89,48 +89,45 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Custom scrollbar for webkit */
+  /* Custom scrollbar */
   ::-webkit-scrollbar {
-    width: 10px;
+    width: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: var(--background);
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
     background: var(--border);
-    border-radius: 5px;
+    border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: var(--muted-foreground);
   }
-  
-  /* Selection styling */
+
   ::selection {
-    background: rgba(255, 255, 255, 0.2);
-    color: var(--foreground);
-  }
-  .dark ::selection {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--foreground);
+    color: var(--background);
   }
 }
 
 @layer utilities {
-  .glass {
-    @apply bg-background/50 backdrop-blur-2xl border border-white/10 dark:border-white/5;
-  }
+  /* Subtle card surface — no excessive blur */
   .glass-card {
-    @apply bg-card/60 backdrop-blur-xl border border-black/5 dark:border-white/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.01)];
+    @apply bg-card border border-border;
   }
-  .liquid-glass {
-    @apply bg-gradient-to-br from-white/10 to-transparent dark:from-white/5 dark:to-transparent backdrop-blur-2xl border border-white/20 dark:border-white/10 shadow-2xl;
-  }
+
+  /* Text gradient — foreground only, no color */
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-foreground to-muted-foreground;
+    @apply bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/60;
   }
-  .text-gradient-accent {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500;
-  }
+
+  /* Smooth transitions */
   .hover-target {
-    @apply transition-all duration-300;
+    @apply transition-all duration-200;
+  }
+
+  /* Section divider */
+  .section-border {
+    @apply border-t border-border;
   }
 }
