@@ -3,26 +3,29 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
-import { Menu, X } from "lucide-react"
+import { Home, User, Wrench, Briefcase, LayoutGrid, GitMerge, Mail, FileText } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 import { Button } from "./ui/button"
 
-const navItems = [
-  { name: "Home", href: "/#home" },
-  { name: "About", href: "/#about" },
-  { name: "Skills", href: "/#skills" },
-  { name: "Services", href: "/#services" },
-  { name: "Projects", href: "/#projects" },
-  { name: "Process", href: "/#process" },
-  { name: "Contact", href: "/#contact" },
+const desktopNavItems = [
+  { name: "Home", href: "/#home", icon: <Home className="w-5 h-5" /> },
+  { name: "About", href: "/#about", icon: <User className="w-5 h-5" /> },
+  { name: "Skills", href: "/#skills", icon: <Wrench className="w-5 h-5" /> },
+  { name: "Services", href: "/#services", icon: <Briefcase className="w-5 h-5" /> },
+  { name: "Projects", href: "/#projects", icon: <LayoutGrid className="w-5 h-5" /> },
+  { name: "Process", href: "/#process", icon: <GitMerge className="w-5 h-5" /> },
+  { name: "Contact", href: "/#contact", icon: <Mail className="w-5 h-5" /> },
+]
+
+const mobileNavItems = [
+  { name: "Home", href: "/#home", icon: <Home className="w-[18px] h-[18px]" /> },
+  { name: "About", href: "/#about", icon: <User className="w-[18px] h-[18px]" /> },
+  { name: "Skills", href: "/#skills", icon: <Wrench className="w-[18px] h-[18px]" /> },
+  { name: "Projects", href: "/#projects", icon: <LayoutGrid className="w-[18px] h-[18px]" /> },
 ]
 
 export function Navbar() {
-  const [isOpen, setIsOpen] = React.useState(false)
   const pathname = usePathname()
-
-  const closeMenu = () => setIsOpen(false)
 
   return (
     <>
@@ -30,7 +33,7 @@ export function Navbar() {
       <header className="hidden md:flex fixed top-6 left-1/2 -translate-x-1/2 z-50 rounded-full border border-border/40 bg-background/60 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-white/5 transition-all duration-300">
         <nav className="flex items-center px-6 h-14">
           <ul className="flex items-center gap-6 text-sm font-medium text-muted-foreground mr-5">
-            {navItems.map((item) => (
+            {desktopNavItems.map((item) => (
               <li key={item.name}>
                 <Link
                   href={item.href}
@@ -54,47 +57,38 @@ export function Navbar() {
         </nav>
       </header>
 
-      {/* Mobile Header */}
-      <header className="flex md:hidden fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] rounded-2xl border border-border/40 bg-background/60 backdrop-blur-xl shadow-lg shadow-black/5 dark:shadow-white/5 transition-all duration-300 flex-col">
-        <div className="flex items-center justify-between w-full px-6 h-14">
-          <ThemeToggle />
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="text-foreground p-1"
-            aria-label="Toggle Menu"
-          >
-            {isOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        </div>
+      {/* Mobile Bottom Navigation Bar */}
+      <header className="flex md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-fit px-1.5 rounded-full border border-border/40 bg-background/80 backdrop-blur-xl shadow-2xl shadow-black/10 dark:shadow-white/5 transition-all duration-300">
+        <nav className="flex items-center gap-1 h-12">
+          {mobileNavItems.map((item) => (
+            <Link
+              key={item.name}
+              href={item.href}
+              className="p-2 text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-full transition-all flex items-center justify-center"
+              aria-label={item.name}
+              title={item.name}
+            >
+              {item.icon}
+            </Link>
+          ))}
+          
+          <div className="w-px h-5 bg-border/50 mx-1 shrink-0" />
+          
+          <div className="shrink-0 scale-[0.85] origin-center">
+            <ThemeToggle />
+          </div>
 
-        {/* Mobile Nav Menu */}
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-16 left-0 right-0 bg-background/90 backdrop-blur-xl border border-border/50 rounded-2xl p-6 shadow-xl md:hidden"
+          <a 
+            href="/resume.pdf" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="p-2 -ml-1 text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-full transition-all flex items-center justify-center shrink-0"
+            title="Resume"
+            aria-label="Resume"
           >
-            <ul className="flex flex-col gap-4 text-base font-medium">
-              {navItems.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    onClick={closeMenu}
-                    className="block hover:text-primary transition-colors text-center"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-              <li className="pt-4 border-t border-border mt-2">
-                <Button asChild className="w-full rounded-full">
-                  <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" onClick={closeMenu}>Resume</a>
-                </Button>
-              </li>
-            </ul>
-          </motion.div>
-        )}
+            <FileText className="w-[18px] h-[18px]" />
+          </a>
+        </nav>
       </header>
     </>
   )
