@@ -5,6 +5,17 @@ import { Section } from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
 import { Mail, Phone } from "lucide-react"
 import { FaLinkedin, FaGithub, FaWhatsapp } from "react-icons/fa"
+import { motion, Variants } from "framer-motion"
+
+const leftVariants: Variants = {
+  hidden: { opacity: 0, x: -30 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] } },
+}
+
+const rightVariants: Variants = {
+  hidden: { opacity: 0, x: 30 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98], delay: 0.2 } },
+}
 
 export function Contact() {
   const [result, setResult] = React.useState("")
@@ -52,10 +63,15 @@ export function Contact() {
   return (
     <Section id="contact" className="bg-background">
       <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 overflow-hidden">
           
           {/* Contact Info */}
-          <div>
+          <motion.div
+            variants={leftVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-6">
               Let's Build Something Great Together
             </h2>
@@ -101,10 +117,16 @@ export function Contact() {
                 </a>
               </Button>
             </div>
-          </div>
+          </motion.div>
 
           {/* Contact Form */}
-          <div className="bg-card border border-border rounded-3xl p-8 shadow-sm">
+          <motion.div
+            variants={rightVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="bg-card border border-border rounded-3xl p-8 shadow-sm"
+          >
             <h3 className="text-2xl font-bold mb-6">Send a Message</h3>
             <form className="space-y-6" onSubmit={onSubmit}>
               
@@ -185,7 +207,7 @@ export function Contact() {
                 </div>
               )}
             </form>
-          </div>
+          </motion.div>
 
         </div>
       </div>

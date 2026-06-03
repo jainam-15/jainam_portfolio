@@ -1,6 +1,27 @@
+"use client"
+
 import * as React from "react"
 import { Section } from "@/components/ui/section"
 import { Globe, Smartphone, Bot, LayoutTemplate, Rocket } from "lucide-react"
+import { motion, Variants } from "framer-motion"
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15 },
+  },
+}
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, scale: 0.9, y: 20 },
+  visible: { 
+    opacity: 1, 
+    scale: 1,
+    y: 0, 
+    transition: { duration: 0.5, ease: [0.21, 0.47, 0.32, 0.98] } 
+  },
+}
 
 const services = [
   {
@@ -59,11 +80,19 @@ export function Services() {
         </div>
 
         {/* Symmetrical Bento Grid (6 Columns) */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 max-w-6xl mx-auto">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-6 gap-6 max-w-6xl mx-auto"
+        >
           {services.map((service, idx) => (
-            <div 
+            <motion.div 
               key={service.title}
-              className={`border rounded-3xl p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group ${service.className}`}
+              variants={itemVariants}
+              whileHover={{ y: -5, scale: 1.02, transition: { duration: 0.2 } }}
+              className={`border rounded-3xl p-8 shadow-sm group ${service.className}`}
             >
               <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform ${service.iconClassName}`}>
                 {service.icon}
@@ -74,9 +103,9 @@ export function Services() {
               <p className={`leading-relaxed text-sm md:text-base ${service.descClassName}`}>
                 {service.description}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </Section>
   )

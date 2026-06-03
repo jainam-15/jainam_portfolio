@@ -1,5 +1,8 @@
+"use client"
+
 import * as React from "react"
 import { Section } from "@/components/ui/section"
+import { motion, Variants } from "framer-motion"
 import { Monitor, Server, Smartphone, BrainCircuit, Wrench } from "lucide-react"
 import { FaJava, FaRobot } from "react-icons/fa"
 import { 
@@ -19,6 +22,23 @@ import {
   SiCodemagic,
   SiFirebase
 } from "react-icons/si"
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 },
+  },
+}
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    transition: { type: "spring", stiffness: 100, damping: 20 } 
+  },
+}
 
 const skillsData = [
   {
@@ -83,15 +103,22 @@ export function Skills() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto"
+        >
           {skillsData.map((group, idx) => {
             // In dark mode, bg-foreground is white. We want 3 white and 2 black.
             // 0, 2, 4 will be white. 1, 3 will be black.
             const isWhiteCard = idx % 2 === 0
             
             return (
-              <div 
+              <motion.div 
                 key={group.category}
+                variants={itemVariants}
                 className={`border rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow group ${
                   isWhiteCard 
                     ? "bg-foreground text-background border-transparent" 
@@ -121,10 +148,10 @@ export function Skills() {
                     </span>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             )
           })}
-        </div>
+        </motion.div>
       </div>
     </Section>
   )

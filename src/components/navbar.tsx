@@ -13,7 +13,6 @@ const desktopNavItems = [
   { name: "Skills", href: "/#skills", icon: <Wrench className="w-5 h-5" /> },
   { name: "Services", href: "/#services", icon: <Briefcase className="w-5 h-5" /> },
   { name: "Projects", href: "/#projects", icon: <LayoutGrid className="w-5 h-5" /> },
-  { name: "Process", href: "/#process", icon: <GitMerge className="w-5 h-5" /> },
   { name: "Contact", href: "/#contact", icon: <Mail className="w-5 h-5" /> },
 ]
 

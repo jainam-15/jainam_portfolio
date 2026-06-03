@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
@@ -5,6 +7,12 @@ import { Section } from "@/components/ui/section"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, ExternalLink } from "lucide-react"
 import { FaGithub } from "react-icons/fa"
+import { motion, Variants } from "framer-motion"
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] } },
+}
 
 const featuredProjects = [
   {
@@ -69,8 +77,12 @@ export function FeaturedProjects() {
             const isEven = idx % 2 === 0
 
             return (
-              <div
+              <motion.div
                 key={project.title}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={itemVariants}
                 className={`flex flex-col gap-8 md:gap-16 items-center ${isEven ? 'md:flex-row' : 'md:flex-row-reverse'}`}
               >
                 {/* Image Side */}
@@ -149,7 +161,7 @@ export function FeaturedProjects() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             )
           })}
         </div>
