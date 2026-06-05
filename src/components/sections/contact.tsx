@@ -26,11 +26,11 @@ export function Contact() {
     setIsSubmitting(true)
     setResult("Sending...")
 
-    const formData = new FormData(event.currentTarget)
+    const form = event.currentTarget;
+    const formData = new FormData(form)
     
     // Web3Forms Access Key
-    // NOTE: Replace this value with your actual Web3Forms Access Key
-    formData.append("access_key", "YOUR_ACCESS_KEY_HERE")
+    formData.append("access_key", "58a6e67d-b078-4a58-ae65-6facc4c0c42d")
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
@@ -42,7 +42,7 @@ export function Contact() {
 
       if (data.success) {
         setResult("Message sent successfully!")
-        event.currentTarget.reset()
+        form.reset()
       } else {
         console.error("Error", data)
         setResult(data.message)
