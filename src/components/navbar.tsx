@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, User, Wrench, Briefcase, LayoutGrid, GitMerge, Mail, FileText } from "lucide-react"
+import { Home, User, Wrench, Briefcase, LayoutGrid, GitMerge, Mail, FileText, ArrowUpRight } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 import { Button } from "./ui/button"
 
@@ -49,8 +49,11 @@ export function Navbar() {
 
           <div className="flex items-center gap-4 ml-2">
             <ThemeToggle />
-            <Button asChild variant="default" className="rounded-full h-9 px-5 text-sm font-semibold">
-              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+            <Button asChild variant="default" className="rounded-full h-9 px-5 text-sm font-semibold gap-1.5">
+              <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+                Resume
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
             </Button>
           </div>
         </nav>
