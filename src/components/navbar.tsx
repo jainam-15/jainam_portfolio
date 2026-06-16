@@ -60,13 +60,13 @@ export function Navbar() {
       </header>
 
       {/* Mobile Bottom Navigation Bar */}
-      <header className="flex md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-fit px-1.5 rounded-full border border-border/40 bg-background/80 backdrop-blur-xl shadow-2xl shadow-black/10 dark:shadow-white/5 transition-all duration-300">
+      <header className="flex md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-fit px-1.5 rounded-full border border-white/10 dark:border-black/10 bg-black dark:bg-white shadow-2xl shadow-black/20 dark:shadow-white/20 transition-all duration-300">
         <nav className="flex items-center gap-1 h-12">
           {mobileNavItems.map((item) => (
             <Link
               key={item.name}
               href={item.href}
-              className="p-2 text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-full transition-all flex items-center justify-center"
+              className="p-2 text-white/70 dark:text-black/70 hover:text-white dark:hover:text-black hover:bg-white/20 dark:hover:bg-black/10 rounded-full transition-all flex items-center justify-center"
               aria-label={item.name}
               title={item.name}
             >
@@ -74,17 +74,17 @@ export function Navbar() {
             </Link>
           ))}
           
-          <div className="w-px h-5 bg-border/50 mx-1 shrink-0" />
+          <div className="w-px h-5 bg-white/20 dark:bg-black/20 mx-1 shrink-0" />
           
           <div className="shrink-0 scale-[0.85] origin-center">
-            <ThemeToggle />
+            <ThemeToggle className="text-white/70 dark:text-black/70 hover:text-white dark:hover:text-black hover:bg-white/20 dark:hover:bg-black/10" />
           </div>
 
           <a 
             href="/resume.pdf" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="p-2 -ml-1 text-muted-foreground hover:text-primary hover:bg-muted/50 rounded-full transition-all flex items-center justify-center shrink-0"
+            className="p-2 -ml-1 text-white/70 dark:text-black/70 hover:text-white dark:hover:text-black hover:bg-white/20 dark:hover:bg-black/10 rounded-full transition-all flex items-center justify-center shrink-0"
             title="Resume"
             aria-label="Resume"
           >

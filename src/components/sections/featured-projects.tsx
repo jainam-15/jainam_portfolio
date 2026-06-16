@@ -28,7 +28,7 @@ const featuredProjects = [
   },
   {
     title: "Your Music Space",
-    description: "Ad-free music platform across Android, iOS, and Web.",
+    description: "Ad-free cross-platform music app built with Flutter for Android, iOS, and Web.",
     features: ["Unlimited listening", "No ads", "Cross-platform synchronization", "Gamified experience"],
     tech: ["Flutter", "Firebase", "Firestore", "Next.js"],
     image: "/yourmusicspace.png",
@@ -45,7 +45,7 @@ const featuredProjects = [
   },
   {
     title: "ChatX",
-    description: "Private real-time chat application.",
+    description: "Private real-time cross-platform chat application built with Flutter.",
     tech: ["Flutter", "Firebase", "Firestore"],
     image: "/chatx.png",
     liveUrl: "https://chatxweb.vercel.app/",

@@ -28,7 +28,7 @@ const allProjects: Project[] = [
   },
   {
     title: "Your Music Space",
-    description: "Ad-free music platform across Android, iOS, and Web.",
+    description: "Ad-free cross-platform music app built with Flutter for Android, iOS, and Web.",
     problem: "Most music streaming apps are cluttered with ads and lack a seamless cross-platform experience without expensive subscriptions.",
     solution: "A completely ad-free, synchronized music streaming experience that feels premium and is accessible everywhere.",
     features: [
@@ -63,7 +63,7 @@ const allProjects: Project[] = [
   },
   {
     title: "ChatX",
-    description: "Private real-time chat application.",
+    description: "Private real-time cross-platform chat application built with Flutter.",
     problem: "Many messaging apps compromise user privacy or have bloated, slow interfaces.",
     solution: "A lightning-fast, secure, and minimal chat application focused on pure communication.",
     features: [
